@@ -1,0 +1,28 @@
+{% extends 'index.html' %}
+{% block content %}
+
+<div class="container mt-4">
+    <form class="d-flex" method="post" role="search" action="{% url 'searchNotes' %}">
+
+        {% csrf_token %}
+        
+        <input class="form-control me-2" type="text" name="searchQ" placeholder="Search" aria-label="Search">
+        <button class="btn btn-outline-success" type="submit">Search</button>
+    </form>
+    <div class="row d-flex justify-content-center align-items-center">
+        
+        {% for x in notes %}
+        <div class="card mt-4 me-4" style="width: 18rem;">
+            <div class="card-body">
+                <h5 class="card-title">{{x.mod}}</h5>
+                <h6 class="card-subtitle mb-2 text-muted">{{x.typeN}}</h6>
+                <p class="card-text">Thanks to : {{x.author}} </p>
+                <a href="{{x.slug}}" class="card-link">View PDF</a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+</div>
+
+{% endblock %}

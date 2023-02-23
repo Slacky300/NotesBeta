@@ -1,0 +1,41 @@
+{% extends 'index.html' %}
+{% block content %}
+{% load static %}
+
+<link rel="stylesheet" href="{% static 'css/land.css' %}">
+
+<style>
+    .desc{
+        padding: 0.5em 2em;
+    }
+    .btn{
+        width: 10em;
+
+    }
+</style>
+    {% include 'authentication/messages.html' %}
+
+   
+            
+                <body class="header">
+                    <div class="text-box">
+                        <h1>GET YOUR NOTES</h1>
+                        <p>BY COMMUNITY FOR COMMUNITY</p>
+                
+                        <a style="text-decoration: none;" href="{% url 'notes' %}" >
+                        <button>    
+                     
+                         <b>GET NOTES</b>
+                
+                    </button></a>
+                    </div>
+                </body>
+
+                
+  
+                
+
+                    
+                
+   
+{% endblock %}

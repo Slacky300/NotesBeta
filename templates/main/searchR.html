@@ -1,0 +1,56 @@
+{% extends 'index.html' %}
+{% block content %}
+{% load static %}
+<style>
+    .nfound{
+        margin-top: -2em;
+    }
+    .sbtn{
+        width: 16em;
+        height: 3em;
+        
+    }
+</style>
+<div class="container mt-4">
+
+    <div class="row">
+        {% if notes %}
+        <div class="col-12">
+            <h3 class="d-flex justify-content-center align-items-center">Your Search Results for {{ser}}</h3>
+        </div>
+            <div class="col-12">
+                {% for x in notes %}
+                <div class="card mt-4 me-4" style="width: 18rem;">
+                    <div class="card-body">
+                        <h5 class="card-title">{{x.mod}}</h5>
+                        <h6 class="card-subtitle mb-2 text-muted">{{x.mod}}</h6>
+                        <p class="card-text">Thanks to : {{x.author}} </p>
+                        <a href="{{x.file.url}}" class="card-link">View PDF</a>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        {% else %}
+        <div class="row d-flex justify-content-center align-items-center">
+
+            <div class="col-md-8 col-lg-7 col-xl-6 d-flex justify-content-center align-items-center  mt-5">
+                <h4 style = "padding: 1em 1em;">Seems like no one has uploaded the notes you've searched for</h4>
+            </div>
+
+            <div class="col-md-8 col-lg-7 col-xl-6 d-flex justify-content-center align-items-center">
+               
+                <img src="{% static 'images/remove.png' %}" class="img-fluid" alt="">
+            </div>
+        </div>
+        <div class="row d-flex justify-content-center align-items-center nfound">
+            <div class="col-md-8 col-lg-7 col-xl-6 d-flex justify-content-center align-items-center">
+                <a href="{% url 'notes' %}" class="slink"><button class="btn sbtn btn-primary">Search Another</button></a>
+            </div>
+        </div>
+        
+        
+        {% endif %}
+    </div>
+
+</div>
+{% endblock %}
