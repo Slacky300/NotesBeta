@@ -1,15 +1,19 @@
 {% extends 'index.html' %}
 {% block content %}
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
-<script>
-</script>
+<style>
+    .errBtn{
+        display: none;
+    }
+</style>
+
+
     <div class="container">
         <div class="row">
             {% include 'authentication/messages.html' %}
             <form action="{% url 'addNotes' %}" method="post" enctype="multipart/form-data" class="row g-3">
 
                 {% csrf_token %}
-        
+
                 <div class="mb-3">
                     <label for="exampleFormControlInput1" class="form-label">Subject</label>
                     <select name="subjectName" class="form-select" id="subject" aria-label="Default select example">
@@ -32,19 +36,19 @@
                             <option value="6">6</option>
                     </select>
                 </div>
-        
+
                 <div class="mb-3">
                     <label for="exampleFormControlInput1" class="form-label">Type</label>
                     <select name="typeN" class="form-select" aria-label="Default select example">
-                        
+
                             <option value="Assignment">Assignment</option>
                             <option value="Experiment">Experiment</option>
                             <option value="Notes">Notes</option>
-                    
+
                     </select>
                 </div>
-                  
-              
+
+
                 <div class="mb-3">
                     <label for="formFileMultiple" class="form-label">Add Files</label>
                     <input class="form-control" type="file" name="file" id="formFileMultiple" multiple>
@@ -54,15 +58,88 @@
                     <label for="exampleFormControlTextarea1" class="form-label">Add Description</label>
                     <textarea class="form-control" id="exampleFormControlTextarea1" name="desc" rows="4"></textarea>
                 </div>
-                      
+
                 <div class="col-12">
                     <button type="submit" style="width: 10em; font-size: 1em" class="btn btn-primary">Submit</button>
                 </div>
-                
+
             </form>
         </div>
+
+
+        <!-- Error message for file too big -->
+        <!-- Button trigger modal -->
+    <button type="button" class="btn btn-primary errBtn" data-bs-toggle="modal" id="errorBrn" data-bs-target="#exampleModal">
+    Launch demo modal
+  </button>
+
+  <!-- Modal -->
+  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">Size Error</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          File size should be less than 20MB! like come on Bro we are using a free webserver.. cope with us
+        </div>
+        <div class="modal-footer">
+
+          <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Got It!</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+
+        <script>
+            const input = document.querySelector('input[type="file"]');
+            let btn = document.getElementById('errorBrn');
+
+            input.addEventListener('change',()=>{
+                validateSize();
+            })
+
+            document.querySelector('form').addEventListener('submit',(e) => {
+
+                const res = validateSize();
+
+                if (res){
+                    e.preventDefault();
+                    btn.click();
+                    throw res;
+                }else{
+                    console.log('okay');
+                }
+
+            })
+
+            function validateSize(){
+                const file = input.files[0];
+                if(!file){
+                   const err =  new Error("No file Selected");
+                   return err;
+                }
+
+                const limit = 20000;
+                const size = file.size/1024;
+                if(size > limit){
+                    const err = new Error(`File too big: ${(size/1000).toFixed(20)} MB`);
+                    return err;
+                }else{
+                    return false;
+                }
+            }
+
+
+
+        </script>
     </div>
 
-  
-   
+
+
 {% endblock %}
+

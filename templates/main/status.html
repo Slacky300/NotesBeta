@@ -15,7 +15,7 @@
           {% for x in notes %}
             <tr>
                 <td scope="row">{{forloop.counter}}</td>
-                <td>{{x.typeN}} of {{x.mod}}</td>
+                <td>{{x.typeN}} of Module {{x.mod}} - {{x.sub}}</td>
                 {% if x.status %}
                 <td style="color: green;">Accepted</td>
                 {% else %}

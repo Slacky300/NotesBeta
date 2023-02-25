@@ -13,8 +13,8 @@ def home(request):
 
 @login_required(login_url='/login/')
 def addNotes(request):
-   
-  
+
+
     subs = Subject.objects.all()
 
     context = {
@@ -32,32 +32,42 @@ def addNotes(request):
         typeN = request.POST.get('typeN')
         subje = request.POST.get('subjectName')
 
-        fs = FileSystemStorage()
-        filename=fs.save(file.name, file)
-        url = fs.url(filename)
+        # fs = FileSystemStorage()
+        # filename=fs.save(file.name, file)
+        # url = fs.url(filename)
 
-        if file.size < 20000000 :
-            sub = Subject.objects.get(name = subje)
-            des = f'{desc} - {mod} of {subje} : {typeN} by {request.user.name}'
-            note = Notes(
-                desc = des,
-                mod = mod,
-                file = file,
-                author = request.user,
-                typeN = typeN,
-                sub = sub,
-            )
+        # if file.size < 20000000 :
+        sub = Subject.objects.get(name = subje)
+        des = f'{desc} - {mod} of {subje} : {typeN} by {request.user.name}'
+        note = Notes(
+            desc = des,
+            mod = mod,
+            file = file,
+            author = request.user,
+            typeN = typeN,
+            sub = sub,
+        )
 
-            note.save()
-            messages.success(request,'Sent for Verification Succesfully')
+        note.save()
+        messages.success(request,'Sent for Verification Succesfully')
+        return redirect('home')
 
-            return redirect('home')
+        # else:
 
-        else:
-
-            messages.error(request,'file size should be less than 10 mb')
+        #     messages.error(request,'file size should be less than 20 mb')
+        #     return redirect('addNotes')
     else:
         return render(request,'main/addNotes.html',context)
+
+
+
+
+
+
+
+
+
+
 
 
 @login_required(login_url='/login/')
@@ -130,15 +140,22 @@ def loginR(request):
 
 def registerR(request):
 
+
     if request.method == 'POST':
 
         email = request.POST.get('email')
         name = request.POST.get('name')
         password = request.POST.get('password')
 
-        myuser = UserAccount.objects.create_user(email, name, password)
-        myuser.save()
-        return HttpResponse('User created')
+        if UserAccount.objects.filter(email=email).exists():
+            messages.warning(request,'User with this email already exists')
+            return render(request,'authentication/register.html')
+        else:
+
+            myuser = UserAccount.objects.create_user(email, name, password)
+            myuser.save()
+            messages.success(request,'User Created Successfully')
+            return render(request,'authentication/register.html')
 
     else:
         return render(request,'authentication/register.html')
@@ -168,4 +185,4 @@ def teacher(request):
         'sub':sub,
     }
     return render(request,'main/teacher.html',context)
-    
+
