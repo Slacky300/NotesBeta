@@ -51,13 +51,13 @@ def addNotes(request):
 
             messages.error(request,'file size should be less than 10 mb')
 
-              
-        
 
 
-        
-        
-    
+
+
+
+
+
 
     return render(request,'main/addNotes.html',context)
 
@@ -92,10 +92,10 @@ def noteDelete(request,slug):
 def searchNotes(request):
 
     if request.method == 'POST':
-        
+
         searchQ = request.POST.get('searchQ')
         notes = Notes.objects.filter(mod__contains = searchQ)
-        
+
         if notes is not None:
             context = {
                 'notes' : notes,
@@ -119,11 +119,11 @@ def loginR(request):
             login(request,user)
             messages.success(request,'Logged In Successfully')
             return redirect('home')
-            
+
         else:
             messages.error(request,'Invalid Credentials')
             return render(request,'authentication/login.html')
-    
+
     else:
         return render(request,'authentication/login.html')
 
@@ -138,9 +138,9 @@ def registerR(request):
         myuser = UserAccount.objects.create_user(email, name, password)
         myuser.save()
         return HttpResponse('User created')
-    
+
     else:
-        return render(request,'authentication/login.html')
+        return render(request,'authentication/register.html')
 
 def logoutR(request):
     logout(request)
@@ -155,9 +155,8 @@ def noteViewer(request, slug):
         'note' : note,
     }
     return render(request,'main/noteViewer.html',context)
-    
+
 def aboutUs(request):
 
     return render(request,'main/about.html')
 
-        
