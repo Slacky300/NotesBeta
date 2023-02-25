@@ -1,20 +1,59 @@
 {% extends 'index.html' %}
 {% block content %}
+{% load crispy_forms_tags %}
+  
+
+
+
 
 <div class="container mt-4">
-    <form class="d-flex" method="post" role="search" action="{% url 'searchNotes' %}">
+    <div class="row d-flex justify-content-center align-items-center">
+        <div class="container-lg-6">
+            <form class="d-flex" method="post" role="search" action="{% url 'searchNotes' %}">
 
-        {% csrf_token %}
+                {% csrf_token %}
+                
+                <input class="form-control me-2" type="text" name="searchQ" placeholder="Search" aria-label="Search">
+                <button class="btn btn-outline-success" type="submit">Search</button>
+                <button type="button" class="btn btn-outline-primary ms-1" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                    Filter
+                </button>
+            </form>
+            
+        </div>
+        <div class="container-lg-6">
+            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                       <form method="get">
+                        {{ notes.form|crispy }}
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button class="btn btn-primary" type="submit">Filter</button>
+                          </div>
+                       </form>
+                    </div>
+                   
+                  </div>
+                </div>
+            </div>
+
+        </div>
         
-        <input class="form-control me-2" type="text" name="searchQ" placeholder="Search" aria-label="Search">
-        <button class="btn btn-outline-success" type="submit">Search</button>
-    </form>
+    </div>
+    
     <div class="row d-flex justify-content-center align-items-center">
         
-        {% for x in notes %}
+        {% for x in notes.qs %}
         <div class="card mt-4 me-4" style="width: 18rem;">
             <div class="card-body">
-                <h5 class="card-title">{{x.mod}}</h5>
+                <h5 class="card-title">{{x.sub}}</h5>
+                <h6 class="card-subtitle mb-2">Module No: {{x.mod}}</h6>
                 <h6 class="card-subtitle mb-2 text-muted">{{x.typeN}}</h6>
                 <p class="card-text">Thanks to : {{x.author}} </p>
                 <a href="{{x.slug}}" class="card-link">View PDF</a>

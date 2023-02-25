@@ -5,6 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.contrib import messages
 from django.core.files.storage import FileSystemStorage
+from . filters import NoteFilter
 # Create your views here.
 def home(request):
 
@@ -12,34 +13,39 @@ def home(request):
 
 @login_required(login_url='/login/')
 def addNotes(request):
-    subj = Subject.objects.all()
-    mod = Module.objects.all()
+   
+  
+    subs = Subject.objects.all()
 
     context = {
-        'mod' : mod,
-        'subj' : subj,
+
+        'subj' : subs,
 
     }
 
     if request.method == 'POST':
 
         desc = request.POST.get('desc')
-        sub = request.POST.get('sub')
+        mod = request.POST.get('moduleNo')
         file = request.FILES.get('file')
 
         typeN = request.POST.get('typeN')
+        subje = request.POST.get('subjectName')
 
         fs = FileSystemStorage()
         filename=fs.save(file.name, file)
         url = fs.url(filename)
 
         if file.size < 20000000 :
+            sub = Subject.objects.get(name = subje)
+            des = f'{desc} - {mod} of {subje} : {typeN} by {request.user.name}'
             note = Notes(
-                desc = desc,
-                mod = sub,
+                desc = des,
+                mod = mod,
                 file = file,
                 author = request.user,
-                typeN = typeN
+                typeN = typeN,
+                sub = sub,
             )
 
             note.save()
@@ -50,24 +56,19 @@ def addNotes(request):
         else:
 
             messages.error(request,'file size should be less than 10 mb')
+    else:
+        return render(request,'main/addNotes.html',context)
 
-
-
-
-
-
-
-
-
-    return render(request,'main/addNotes.html',context)
 
 @login_required(login_url='/login/')
 def notes(request):
     notes = Notes.objects.filter(status = True)
+    filteredNotes = NoteFilter(request.GET, queryset = notes)
     context = {
-        'notes' : notes
+        'notes' : filteredNotes,
     }
     return render(request,'main/realHome.html',context)
+
 
 @login_required(login_url='/login/')
 def status(request):
@@ -160,3 +161,11 @@ def aboutUs(request):
 
     return render(request,'main/about.html')
 
+@login_required(login_url='/login/')
+def teacher(request):
+    sub=Subject.objects.all()
+    context={
+        'sub':sub,
+    }
+    return render(request,'main/teacher.html',context)
+    

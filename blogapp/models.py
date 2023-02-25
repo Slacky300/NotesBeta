@@ -63,7 +63,7 @@ class Subject(models.Model):
 
     name = models.CharField(max_length=50)
     teacher = models.CharField(max_length=50)
-
+    teacherurl = models.CharField(max_length=300,null=True,blank=True)
     def __str__(self):
         return self.name
 
@@ -75,19 +75,37 @@ class Module(models.Model):
     def __str__(self):
         return self.name
 
+
+
 class Notes(models.Model):
 
+    typ = (
+        ('Assignment','Assignment'),
+        ('Experiment','Experiment'),
+        ('Notes','Notes'),
+    )
 
+    mods = (
+        ('1','1'),
+        ('2','2'),
+        ('3','3'),
+        ('4','4'),
+        ('5','5'),
+        ('6','6'),
+    )
 
     desc = models.TextField(max_length=500,null=True,blank=True)
-    mod = models.CharField(max_length=100)
+    mod = models.CharField(max_length=5,choices=mods,null=True,blank=True)
     file = models.FileField(upload_to='notes/')
-    slug = AutoSlugField(populate_from = 'mod',unique=True,null=True,default=None)
     author = models.ForeignKey(UserAccount,on_delete=models.CASCADE)
     status = models.BooleanField(default=False)
-    typeN = models.CharField(max_length=50,null=True,blank=True)
+    typeN = models.CharField(max_length=50,null=True,blank=True,choices=typ)
     docid = models.CharField(max_length=300,null=True,blank=True)
+    sub =  models.ForeignKey(Subject,on_delete=models.CASCADE,null=True,blank=True)
+    slug = AutoSlugField(populate_from = 'sub',unique=True,null=True,default=None)
 
     def __str__(self):
-        return self.mod
 
+        niu = f'{self.sub.name} - {self.mod} {self.typeN}'
+
+        return niu

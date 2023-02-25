@@ -1,6 +1,8 @@
 {% extends 'index.html' %}
 {% block content %}
-
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+<script>
+</script>
     <div class="container">
         <div class="row">
             {% include 'authentication/messages.html' %}
@@ -8,14 +10,26 @@
 
                 {% csrf_token %}
         
-                
+                <div class="mb-3">
+                    <label for="exampleFormControlInput1" class="form-label">Subject</label>
+                    <select name="subjectName" class="form-select" id="subject" aria-label="Default select example">
+                        <option selected disabled="true"></option>
+                        {% for x in subj %}
+                            <option value="{{x.name}}">{{x.name}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
 
                 <div class="mb-3">
                     <label for="exampleFormControlInput1" class="form-label">Module</label>
-                    <select name="sub" class="form-select" aria-label="Default select example">
-                        {% for x in mod %}
-                            <option value="{{x.name}}">{{x.name}}</option>
-                        {% endfor %}
+                    <select name="moduleNo" class="form-select" id="module" aria-label="Default select example">
+                            <option selected disabled="true"></option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                            <option value="6">6</option>
                     </select>
                 </div>
         
@@ -48,5 +62,7 @@
             </form>
         </div>
     </div>
+
+  
    
 {% endblock %}
