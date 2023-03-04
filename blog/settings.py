@@ -48,7 +48,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
-    #'whitenoise.middleware.WhiteNoiseMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -125,14 +125,21 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
-STATIC_URL = '/static/'
+#STATIC_URL = '/static/'
 
 
-STATICFILES_DIRS = [
- os.path.join(BASE_DIR,'static')
-]
+# STATICFILES_DIRS = [
+#  os.path.join(BASE_DIR,'static')
+# ]
 #STATIC_ROOT = BASE_DIR / 'static'
+STATIC_URL = '/static/'
+MEDIA_URL = '/media/'
+if DEBUG:
+  STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+else:
+  STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 
 
@@ -153,9 +160,9 @@ MESSAGE_TAGS = {
 
 }
 
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR,'media/')
-MEDIA_ROOT = [os.path.join(BASE_DIR, 'media')]
+# MEDIA_URL = '/media/'
+# MEDIA_ROOT = os.path.join(BASE_DIR,'media/')
+# MEDIA_ROOT = [os.path.join(BASE_DIR, 'media')]
 
 #static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)
 

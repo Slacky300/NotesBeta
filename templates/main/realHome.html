@@ -1,10 +1,7 @@
 {% extends 'index.html' %}
 {% block content %}
 {% load crispy_forms_tags %}
-{% load static %}
-
-
-<div class="container mt-4" >
+  
 
 <style>
     .notesCnt{
@@ -14,7 +11,6 @@
 
 
 <div class="container notesCnt mt-4">
-
     <div class="row d-flex justify-content-center align-items-center">
         <div class="container-lg-6">
             <form class="d-flex" method="post" role="search" action="{% url 'searchNotes' %}">
