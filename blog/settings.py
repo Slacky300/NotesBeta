@@ -29,8 +29,8 @@ SECRET_KEY = 'django-insecure-ii*6olfb(ajlyy(*0nc0*+)_$j7j+ojy64o57%(6=pil8@=t7=
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['NotesProjectBeta.pythonanywhere.com',]
-#ALLOWED_HOSTS = []
+#ALLOWED_HOSTS = ['NotesProjectBeta.pythonanywhere.com',]
+ALLOWED_HOSTS = []
 
 
 # Application definition
@@ -48,7 +48,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
-    'whitenoise.middleware.WhiteNoiseMiddleware',
+    #'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -127,14 +127,14 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-# if DEBUG:
-#     STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
-# else:
-#     STATIC_ROOT = os.path.join(BASE_DIR, 'static')
-#STATICFILES_DIRS = [
- #os.path.join(BASE_DIR,'static')
-#]
-STATIC_ROOT = BASE_DIR / 'static'
+ #if DEBUG:
+  #   STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+ #else:
+   #  STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+STATICFILES_DIRS = [
+ os.path.join(BASE_DIR,'static')
+]
+#STATIC_ROOT = BASE_DIR / 'static'
 
 
 
@@ -170,7 +170,7 @@ static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)
 
 
 
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+#STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
 
