@@ -186,3 +186,19 @@ def teacher(request):
     }
     return render(request,'main/teacher.html',context)
 
+def btmNav(request):
+
+    notes = Notes.objects.filter(typeN='LectureSlides')
+    return render(request,'main/btmNavSort.html',{'notes':notes})
+
+
+def refeBk(request):
+
+    notes = Notes.objects.filter(typeN='ReferenceBook')
+    return render(request,'main/btmNavSort.html',{'notes':notes})
+
+
+def pyqA(request):
+
+    notes = Notes.objects.filter(typeN='PYQ')
+    return render(request,'main/btmNavSort.html',{'notes':notes})

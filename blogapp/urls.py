@@ -14,5 +14,8 @@ urlpatterns = [
     path('aboutus/',views.aboutUs,name='about'),
     path('register/',views.registerR,name='register'),
     path('teacher/',views.teacher,name='teacher'),
+    path('btmNav/',views.btmNav,name='btmNav'),
+    path('referenceBooks/',views.refeBk,name='referenceBooks'),
+    path('pyq/',views.pyqA,name='pyqA'),
 
 ]

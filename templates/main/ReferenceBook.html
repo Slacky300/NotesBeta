@@ -1,15 +1,8 @@
 {% extends 'index.html' %}
 {% block content %}
 {% load crispy_forms_tags %}
-  
 
-<style>
-    .notesCnt{
-        margin-bottom: 5em;
-    }
-</style>
-
-
+    
 <div class="container notesCnt mt-4">
     <div class="row d-flex justify-content-center align-items-center">
         <div class="container-lg-6">
@@ -19,13 +12,10 @@
                 
                 <input class="form-control me-2" type="text" name="searchQ" placeholder="Search" aria-label="Search">
                 <button class="btn btn-outline-success" type="submit">Search</button>
-                <button type="button" class="btn btn-outline-primary ms-1" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                    Filter
-                </button>
             </form>
             
         </div>
-        <div class="container-lg-6">
+        <!-- <div class="container-lg-6">
             <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                 <div class="modal-dialog">
                   <div class="modal-content">
@@ -47,17 +37,16 @@
                 </div>
             </div>
 
-        </div>
+        </div> -->
         
     </div>
     
     <div class="row d-flex justify-content-center align-items-center">
         
-        {% for x in notes.qs %}
+        {% for x in notes %}
         <div class="card mt-4 mx-4" style="width: 18rem;">
             <div class="card-body">
                 <h5 class="card-title">{{x.sub}}</h5>
-                <h6 class="card-subtitle mb-2">Module No: {{x.mod}}</h6>
                 <h6 class="card-subtitle mb-2 text-muted">{{x.typeN}}</h6>
                 <p class="card-text">Thanks to : {{x.author}} </p>
                 <a href="{{x.slug}}" class="card-link">View PDF</a>
@@ -67,5 +56,6 @@
     </div>
  
 </div>
-    {% include 'components/notesBottomNav.html' %}
+{% include 'components/notesBottomNav.html' %}
+
 {% endblock %}

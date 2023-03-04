@@ -1,0 +1,58 @@
+<style>
+    .navt{
+        position: fixed;
+        bottom: 0;
+        width: 100%;
+        height: 55px;
+        box-shadow: 0 0 3px rgba(0, 0, 0, 0.2);
+        background-color: #ffffff;
+        overflow-x: auto;
+        display: flex;
+    }
+    .nav-linkt{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        flex-grow: 1;
+        min-width: 50px;
+        overflow: hidden;
+        white-space: nowrap;
+        font-size: 14px;
+        text-decoration: none;
+        color: #444444;
+        -webkit-tap-highlight-color: transparent;
+        transition: background-color 0.1s ease-in-out;
+
+    }
+    i{
+        font-size: 1.4em;
+    }
+</style>
+<script src="https://kit.fontawesome.com/30f827dc0d.js" crossorigin="anonymous"></script>
+<nav class="navt">
+
+    <a href="{% url 'btmNav' %}" class="nav-linkt">
+        <i class="fab fa-slideshare" title="Lecture Slides"></i>
+        <!-- <span class="nav-text">Lecture Slides</span> -->
+    </a>
+
+    <a href="{% url 'notes' %}" class="nav-linkt">
+        <i  class="far fa-sticky-note" title="Notes"></i>
+        <!-- <span class="nav-text">Notes</span> -->
+    </a>
+
+    <a href="{% url 'referenceBooks' %}" class="nav-linkt">
+        <i class="fas fa-book" title="Reference Books"></i>
+        <!-- <span class="nav-text">Reference Books</span> -->
+    </a>
+
+    <a href="{% url 'pyqA' %}" class="nav-linkt">
+        <i class="far fa-newspaper"></i>
+        <!-- <span class="nav-text">PYQ</span> -->
+    </a>
+
+   
+
+
+</nav>

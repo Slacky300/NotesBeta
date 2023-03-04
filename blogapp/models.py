@@ -80,9 +80,15 @@ class Module(models.Model):
 class Notes(models.Model):
 
     typ = (
+
         ('Assignment','Assignment'),
         ('Experiment','Experiment'),
         ('Notes','Notes'),
+        ('ReferenceBook','Reference Book'),
+        ('LectureSlides','Lecture Slides'),
+        ('PYQ','PYQ'),
+
+        
     )
 
     mods = (
@@ -106,6 +112,6 @@ class Notes(models.Model):
 
     def __str__(self):
 
-        niu = f'{self.sub.name} - {self.mod} {self.typeN}'
+        niu = f'{self.sub.name} - {self.mod} {self.typeN} by {self.author}'
 
         return niu
