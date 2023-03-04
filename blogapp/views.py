@@ -202,3 +202,6 @@ def pyqA(request):
 
     notes = Notes.objects.filter(typeN='PYQ')
     return render(request,'main/btmNavSort.html',{'notes':notes})
+
+def error_404(request, exception):
+    return render(request,'authentication/404.html')
