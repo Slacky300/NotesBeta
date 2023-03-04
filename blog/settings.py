@@ -27,10 +27,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-ii*6olfb(ajlyy(*0nc0*+)_$j7j+ojy64o57%(6=pil8@=t7='
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 #ALLOWED_HOSTS = ['NotesProjectBeta.pythonanywhere.com',]
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -127,10 +127,7 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
- #if DEBUG:
-  #   STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
- #else:
-   #  STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+
 STATICFILES_DIRS = [
  os.path.join(BASE_DIR,'static')
 ]
@@ -158,8 +155,9 @@ MESSAGE_TAGS = {
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR,'media/')
-# MEDIA_ROOT = [os.path.join(BASE_DIR, 'media')]
-static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)
+MEDIA_ROOT = [os.path.join(BASE_DIR, 'media')]
+
+#static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)
 
 
 
