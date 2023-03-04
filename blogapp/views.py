@@ -105,7 +105,7 @@ def searchNotes(request):
     if request.method == 'POST':
 
         searchQ = request.POST.get('searchQ')
-        notes = Notes.objects.filter(mod__contains = searchQ)
+        notes = Notes.objects.filter(desc__contains = searchQ)
 
         if notes is not None:
             context = {

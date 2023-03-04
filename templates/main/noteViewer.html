@@ -4,17 +4,17 @@
         {% for x in note%}
         <div class="row">
             
-               
+       <!-------------
         <div id="viewer" style="width: 100%; height: 80vh;"></div>
         <p class="{{x.docid}}" id="sle"></p>  
-        </div>
-        
+        </div>--->        
+        <iframe src="{{x.docid}}" width="840" height="900" allow="autoplay"></iframe>
         {% endfor %}
     </div>
     
 
 
-  <script type="text/javascript" src="https://cloudpdf.io/viewer.min.js"></script>
+  <!------------<script type="text/javascript" src="https://cloudpdf.io/viewer.min.js"></script>
   <script>
     let a = document.getElementById('sle');
       let b = a.className
@@ -26,7 +26,12 @@
     CloudPDF(config, document.getElementById('viewer')).then((instance) => {
       
     });
-  </script>
+  </script>--->
+
+
+    
+   
+
   
 
 
