@@ -17,5 +17,6 @@ urlpatterns = [
     path('btmNav/',views.btmNav,name='btmNav'),
     path('referenceBooks/',views.refeBk,name='referenceBooks'),
     path('pyq/',views.pyqA,name='pyqA'),
+    path('searchRecmd/',views.searchRecmd,name='searchRecmd')
 
 ]
