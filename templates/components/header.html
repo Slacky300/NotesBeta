@@ -5,13 +5,13 @@
 <nav class="navbar navbar-dark bg-dark  ">
     <div class="container-fluid">
       <a class="navbar-brand" href="{% url 'home' %}">NOTES VCET</a>
-      
+
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
-      
+
       <div class="collapse navbar-collapse " id="navbarSupportedContent">
-        
+
         <ul class="navbar-nav mb-2 mb-lg-0">
           {% if user.is_superuser %}
             <li class="nav-item">
@@ -24,6 +24,7 @@
               <input type="checkbox"
                   role="switch"
                   id="flexSwitch"
+                  checked
                   onclick="themeMode()">
               <span class="slider"></span>
           </label>
@@ -47,8 +48,8 @@
           <li class="nav-item">
             <a class="nav-link " href="{% url 'teacher' %}">Faculty</a>
           </li>
-          
-       
+
+
 
           <li class="nav-item dropdown me-4">
             <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -59,34 +60,34 @@
               <li><a class="dropdown-item" href="{% url 'status' %}">Status</a></li>
               <li><a class="dropdown-item" href="{% url 'logout' %}">Logout</a></li>
             </ul>
-            
+
           </li>
-          
+
             {% endif %}
 
         </ul>
       </div>
-      
+
     </div>
-    
+
   </nav>
-  
+
   <style>
     .navbar
     {
         border: 0.2px solid white;
-        border-radius: 10px;
+
 
     }
   </style>
 <!-----------
   <script>
-    
+
     function themeMode(){
       var element = document.body;
       element.dataset.bsTheme =
         elemnt.dataset.bsTheme == "light" ? "dark" : "light";
-    }  
+    }
   </script>----->
 
- 
+
