@@ -215,6 +215,8 @@ def teacher(request):
 
 
 
+#Bottom nav views starts here
+@login_required(login_url='/login/')
 def btmNav(request):
 
     notes = Notes.objects.filter(typeN='LectureSlides')
@@ -234,6 +236,7 @@ def pyqA(request):
     notes = Notes.objects.filter(typeN='PYQ')
     return render(request,'main/btmNavSort.html',{'notes':notes})
 
+#bottom nav views ends here
 
 
 def error_404(request, exception):
