@@ -10,22 +10,26 @@
         height: 3em;
         
     }
+    .searchCnt{
+        margin-bottom: 2em;
+    }
 </style>
-<div class="container mt-4">
+<div class="container mt-4 searchCnt">
 
     <div class="row">
         {% if notes %}
         <div class="col-12">
             <h3 class="d-flex justify-content-center align-items-center">Your Search Results for {{ser}}</h3>
         </div>
-            <div class="col-12">
+            <div class="row d-flex justify-content-center align-items-center">
                 {% for x in notes %}
-                <div class="card mt-4 me-4" style="width: 18rem;">
+                <div class="card mt-4 mx-4" style="width: 18rem;">
                     <div class="card-body">
-                        <h5 class="card-title">{{x.mod}}</h5>
-                        <h6 class="card-subtitle mb-2 text-muted">{{x.mod}}</h6>
+                        <h5 class="card-title">{{x.sub}}</h5>
+                        <h6 class="card-subtitle mb-2">Module No: {{x.mod}}</h6>
+                        <h6 class="card-subtitle mb-2 text-muted">{{x.typeN}}</h6>
                         <p class="card-text">Thanks to : {{x.author}} </p>
-                        <a href="{{x.file.url}}" class="card-link">View PDF</a>
+                        <a href="{{x.slug}}" class="card-link">View PDF</a>
                     </div>
                 </div>
                 {% endfor %}
