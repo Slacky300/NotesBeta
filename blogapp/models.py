@@ -100,6 +100,9 @@ class Notes(models.Model):
         ('6','6'),
     )
 
+
+    
+
     desc = models.TextField(max_length=500,null=True,blank=True)
     mod = models.CharField(max_length=5,choices=mods,null=True,blank=True)
     file = models.FileField(upload_to='notes/')
@@ -109,6 +112,10 @@ class Notes(models.Model):
     docid = models.CharField(max_length=300,null=True,blank=True)
     sub =  models.ForeignKey(Subject,on_delete=models.CASCADE,null=True,blank=True)
     slug = AutoSlugField(populate_from = 'sub',unique=True,null=True,default=None)
+
+    details = f'{sub.name}+ Module - {mod} - {typeN} by {author}'
+
+    nDetail = models.CharField(max_length=100,null=True,blank=True,default=details)
 
     def __str__(self):
 

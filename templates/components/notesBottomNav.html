@@ -28,28 +28,38 @@
     i{
         font-size: 1.4em;
     }
+
+    i,span{
+        color: #fff;
+    }
+
+    @media(max-width:700px){
+        span{
+            font-size: 10px;
+        }
+    }
 </style>
 <script src="https://kit.fontawesome.com/30f827dc0d.js" crossorigin="anonymous"></script>
-<nav class="navt">
+<nav class="navt bg-dark">
 
     <a href="{% url 'btmNav' %}" class="nav-linkt">
         <i class="fab fa-slideshare" title="Lecture Slides"></i>
-        <!-- <span class="nav-text">Lecture Slides</span> -->
+        <span class="nav-text">Lecture Slides</span>
     </a>
 
     <a href="{% url 'notes' %}" class="nav-linkt">
         <i  class="far fa-sticky-note" title="Notes"></i>
-        <!-- <span class="nav-text">Notes</span> -->
+        <span class="nav-text">Notes</span>
     </a>
 
     <a href="{% url 'referenceBooks' %}" class="nav-linkt">
         <i class="fas fa-book" title="Reference Books"></i>
-        <!-- <span class="nav-text">Reference Books</span> -->
+        <span class="nav-text">Reference Books</span>
     </a>
 
     <a href="{% url 'pyqA' %}" class="nav-linkt">
         <i class="far fa-newspaper"></i>
-        <!-- <span class="nav-text">PYQ</span> -->
+        <span class="nav-text">PYQ</span>
     </a>
 
    
