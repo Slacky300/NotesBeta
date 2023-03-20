@@ -12,6 +12,10 @@ from . filters import NoteFilter
 def home(request):
 
     return render(request,'main/land.html')
+@login_required(login_url='/login/')
+def dashboard(request):
+
+    return render(request,'main/dashboard.html')
 
 
 
@@ -22,6 +26,7 @@ def addNotes(request):
 
 
     subs = Subject.objects.all()  #To display subjects in the dropdown menu
+    coins = UserAccount.objects.get()
 
     context = {
 
