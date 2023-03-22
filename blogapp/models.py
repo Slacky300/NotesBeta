@@ -50,7 +50,7 @@ class UserAccount(AbstractBaseUser, PermissionsMixin):
     is_mod = models.BooleanField(default=False)
     is_nUser = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
-    coins_scored = models.IntegerField(default=0,null=True,blank=True)
+    coins_scored = models.IntegerField(default=100,null=True,blank=True)
 
     objects = UserAccountManager()
 

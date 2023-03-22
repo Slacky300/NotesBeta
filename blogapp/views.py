@@ -285,14 +285,18 @@ def acceptStatus(request,slug):
     if notes.status:
         notes.status = False
         notes.save()
-        user.coins_scored = user.coins_scored - 5
+        user.coins_scored = user.coins_scored - 50
         user.save()
         messages.success(request,'Notes rejected successfully')
         return redirect('adminResponse')
     else:
         notes.status = True
         notes.save()
-        user.coins_scored = user.coins_scored + 5
+        user.coins_scored = user.coins_scored + 50
         user.save()
         messages.success(request,'Notes accepted successfully')
         return redirect('adminResponse')
+    
+def leaderboard(request):
+    users = UserAccount.objects.order_by('-coins_scored') # get all the users in descending order based on coins
+    return render(request, 'main/leader.html', {'users': users})

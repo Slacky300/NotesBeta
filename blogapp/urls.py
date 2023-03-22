@@ -22,6 +22,7 @@ urlpatterns = [
     path('pyq/',views.pyqA,name='pyqA'),
     path('searchRecmd/',views.searchRecmd,name='searchRecmd'),
     path('adminResponse/',views.adminResponse,name='adminResponse'),
+    path('leaderboard/',views.leaderboard,name='leaderboard'),
     path('acceptStatus/<slug:slug>/',views.acceptStatus,name='acceptStatus'),
 
 ]
