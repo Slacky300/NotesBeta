@@ -20,6 +20,8 @@ urlpatterns = [
     path('btmNav/<slug:slug>',views.noteViewer,name='btmNav'),
     path('referenceBooks/',views.refeBk,name='referenceBooks'),
     path('pyq/',views.pyqA,name='pyqA'),
-    path('searchRecmd/',views.searchRecmd,name='searchRecmd')
+    path('searchRecmd/',views.searchRecmd,name='searchRecmd'),
+    path('adminResponse/',views.adminResponse,name='adminResponse'),
+    path('acceptStatus/<slug:slug>/',views.acceptStatus,name='acceptStatus'),
 
 ]

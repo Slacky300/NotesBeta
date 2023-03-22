@@ -50,7 +50,7 @@ class UserAccount(AbstractBaseUser, PermissionsMixin):
     is_mod = models.BooleanField(default=False)
     is_nUser = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
-    coins_scored = models.FloatField(default=0)
+    coins_scored = models.IntegerField(default=0,null=True,blank=True)
 
     objects = UserAccountManager()
 
@@ -123,3 +123,7 @@ class Notes(models.Model):
         niu = f'{self.sub.name} - {self.mod} {self.typeN} by {self.author}'
 
         return niu
+    
+    def acceptStatus(self):
+
+        return f'/acceptStatus/{self.slug}/'

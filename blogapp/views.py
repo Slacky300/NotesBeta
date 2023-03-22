@@ -12,10 +12,27 @@ from . filters import NoteFilter
 def home(request):
 
     return render(request,'main/land.html')
+
+
+def adminResponse(request):
+
+    notes = Notes.objects.all()
+    context = {
+        'notes' : notes,
+    }
+
+    return render(request,'main/adminTem/adminCrud.html',context)
+
+
 @login_required(login_url='/login/')
 def dashboard(request):
 
-    return render(request,'main/dashboard.html')
+
+    notes = Notes.objects.filter(author = request.user)
+    context = {
+        'notes' : notes
+    }
+    return render(request,'main/dashboard.html',context)
 
 
 
@@ -26,7 +43,6 @@ def addNotes(request):
 
 
     subs = Subject.objects.all()  #To display subjects in the dropdown menu
-    coins = UserAccount.objects.get()
 
     context = {
 
@@ -260,3 +276,23 @@ def searchRecmd(request):
             rcmdList.append(n.nDetail)
 
     return JsonResponse({'status':200 , 'data' : rcmdList})
+
+
+def acceptStatus(request,slug):
+
+    notes = Notes.objects.get(slug=slug)
+    user = UserAccount.objects.get(email = notes.author.email)
+    if notes.status:
+        notes.status = False
+        notes.save()
+        user.coins_scored = user.coins_scored - 5
+        user.save()
+        messages.success(request,'Notes rejected successfully')
+        return redirect('adminResponse')
+    else:
+        notes.status = True
+        notes.save()
+        user.coins_scored = user.coins_scored + 5
+        user.save()
+        messages.success(request,'Notes accepted successfully')
+        return redirect('adminResponse')
