@@ -38,11 +38,13 @@
 
     <table>
       <tr>
+        <th>Rank</th>
         <th>User</th>
         <th>Coins</th>
       </tr>
       {% for user in users %}
       <tr>
+        <td>{{ forloop.counter }}</td>
         <td>{{user.name}}</td>
         <td>{{user.coins_scored}}</td>
       </tr>

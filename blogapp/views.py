@@ -6,6 +6,7 @@ from django.http import HttpResponse, JsonResponse
 from django.contrib import messages
 from django.core.files.storage import FileSystemStorage
 from . filters import NoteFilter
+from django.db.models import Count
 # Create your views here.
 
 
@@ -26,11 +27,14 @@ def adminResponse(request):
 
 @login_required(login_url='/login/')
 def dashboard(request):
-
-
+    user_id=request.user.id
+    user = UserAccount.objects.get(id=user_id)
+    rank = UserAccount.objects.filter(coins_scored__gt=user.coins_scored).aggregate(rank=Count('coins_scored'))['rank'] + 1
     notes = Notes.objects.filter(author = request.user)
     context = {
-        'notes' : notes
+        'notes' : notes,
+        'rank':rank,
+        
     }
     return render(request,'main/dashboard.html',context)
 
@@ -298,5 +302,14 @@ def acceptStatus(request,slug):
         return redirect('adminResponse')
     
 def leaderboard(request):
-    users = UserAccount.objects.order_by('-coins_scored') # get all the users in descending order based on coins
-    return render(request, 'main/leader.html', {'users': users})
+    # users_above = UserAccount.objects.filter(coins_scored__gt=UserAccount.coins_scored)
+    # rank = users_above.count() + 1
+    
+    # users = UserAccount.objects.order_by('-coins_scored')[:10] this is for top 10 users
+    users = UserAccount.objects.order_by('-coins_scored')
+    context={
+        'users': users,
+        
+    }
+   
+    return render(request, 'main/leader.html',context)

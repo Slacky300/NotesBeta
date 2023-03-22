@@ -58,7 +58,7 @@ class UserAccount(AbstractBaseUser, PermissionsMixin):
     REQUIRED_FIELDS = ['name']
 
     def __str__(self):
-        return self.name
+        return f"{self.name} ({self.coins_scored})"
 
 class Subject(models.Model):
 
