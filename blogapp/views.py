@@ -7,7 +7,13 @@ from django.contrib import messages
 from django.core.files.storage import FileSystemStorage
 from . filters import NoteFilter
 from django.db.models import Count
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
+
 # Create your views here.
+
+# for user in UserAccount.objects.all():
+#     user.coins_scored -=100
+#     user.save()
 
 
 def home(request):
@@ -300,16 +306,27 @@ def acceptStatus(request,slug):
         user.save()
         messages.success(request,'Notes accepted successfully')
         return redirect('adminResponse')
-    
+
+
+
+@login_required(login_url='/login/')
 def leaderboard(request):
     # users_above = UserAccount.objects.filter(coins_scored__gt=UserAccount.coins_scored)
     # rank = users_above.count() + 1
     
-    # users = UserAccount.objects.order_by('-coins_scored')[:10] this is for top 10 users
-    users = UserAccount.objects.order_by('-coins_scored')
+    users = UserAccount.objects.all().order_by('-coins_scored')
+    top_users = UserAccount.objects.order_by('-coins_scored')[:3] # Assuming 'coins' is the field used for ranking
+
+    # users = UserAccount.objects.all().order_by('-coins_scored')[:10] 
+
+    
+    # users = UserAccount.objects.order_by('-coins_scored')
+    paginator = Paginator(users, 15)  
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
     context={
-        'users': users,
-        
+        'users': users,'notes' : notes,'page_obj':page_obj,'top_users': top_users,
     }
    
     return render(request, 'main/leader.html',context)
