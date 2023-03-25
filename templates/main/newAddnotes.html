@@ -1,5 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends 'index.html' %}
+{% block content %}
+{% load static %}
+<!-- <!DOCTYPE html>
+<html lang="en"> -->
 
 <head>
     <meta charset="UTF-8">
@@ -101,7 +104,7 @@
                             </label>
                             <div>
                            <br>
-                                <button>
+                                <button class="hbtn">
                                     <div class="svg-wrapper-1">
                                       <div class="svg-wrapper">
                                         <svg height="24" width="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -111,7 +114,7 @@
                                       </div>
                                     </div>
                                     <span>Send</span>
-                                  </button>
+                                </button>
                                 
                         </form>
 
@@ -121,10 +124,10 @@
         </div>
 
     </section>
-k
+
 
     <style>
-        button {
+        .hbtn {
             /* margin-top: 40px;
             margin-left: 40%; */
             /* margin-top: 50px; */
@@ -146,31 +149,31 @@ k
             transition: all 0.2s;
         }
 
-        button span {
+        .hbtn span {
             display: block;
             margin-left: 0.3em;
             transition: all 0.3s ease-in-out;
         }
 
-        button svg {
+        .hbtn svg {
             display: block;
             transform-origin: center center;
             transition: transform 0.3s ease-in-out;
         }
 
-        button:hover .svg-wrapper {
+        .hbtn:hover .svg-wrapper {
             animation: fly-1 0.6s ease-in-out infinite alternate;
         }
 
-        button:hover svg {
+        .hbtn:hover svg {
             transform: translateX(1.2em) rotate(45deg) scale(1.1);
         }
 
-        button:hover span {
+        .hbtn:hover span {
             transform: translateX(5em);
         }
 
-        button:active {
+        .hbtn:active {
             transform: scale(0.95);
         }
 
@@ -258,7 +261,7 @@ k
             border: 1px solid rgba(8, 8, 8, 0.288);
         }
 
-        #file-input::file-selector-button {
+        #file-input::file-selector-hbtn {
             margin-right: 20px;
             border: none;
             background: #084cdf;
@@ -269,7 +272,7 @@ k
             transition: background .2s ease-in-out;
         }
 
-        #file-input::file-selector-button:hover {
+        #file-input::file-selector-hbtn:hover {
             background: #0d45a5;
         }
     </style>
@@ -295,4 +298,6 @@ k
 
 </body>
 
-</html>
+{% endblock %}
+<!-- 
+</html> -->
