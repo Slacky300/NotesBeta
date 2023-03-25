@@ -1,12 +1,14 @@
-from django.shortcuts import render, redirect
+from django.forms import SlugField
+from django.shortcuts import render, redirect,get_object_or_404
 from . models import *
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponse, JsonResponse
+from django.http import HttpResponse, JsonResponse,HttpResponseRedirect
 from django.contrib import messages
 from django.core.files.storage import FileSystemStorage
 from . filters import NoteFilter
-from django.db.models import Count
+from django.db.models import Count,Sum
+from django . urls import reverse
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 
 # Create your views here.
@@ -36,9 +38,11 @@ def dashboard(request):
     user_id=request.user.id
     user = UserAccount.objects.get(id=user_id)
     rank = UserAccount.objects.filter(coins_scored__gt=user.coins_scored).aggregate(rank=Count('coins_scored'))['rank'] + 1
-    notes = Notes.objects.filter(author = request.user)
+    notes = Notes.objects.filter(author = request.user,status=True)
+    note_likes = notes.annotate(likes_count=Count('likes')).aggregate(total_likes=Sum('likes_count'))['total_likes']
     context = {
         'notes' : notes,
+        'note_likes':note_likes,
         'rank':rank,
         
     }
@@ -222,6 +226,7 @@ def logoutR(request):
 @login_required(login_url='/login/')
 def noteViewer(request, slug):
 
+
     note = Notes.objects.filter(slug = slug)
     context = {
         'note' : note,
@@ -306,6 +311,15 @@ def acceptStatus(request,slug):
         user.save()
         messages.success(request,'Notes accepted successfully')
         return redirect('adminResponse')
+    
+def notesuploded(request):
+    notes = Notes.objects.filter(author = request.user,status=True) #Fetches only those notes which are uploaded by the respected user
+    context = {
+        'notes' : notes,
+    }
+
+    return render(request,'main/notesuploded.html',context)
+
 
 
 
@@ -331,5 +345,40 @@ def leaderboard(request):
    
     return render(request, 'main/leader.html',context)
 
+# @login_required(login_url='/login/')
+# def like_notes(request,pk):
+#      notes=get_object_or_404(Notes,id=request.POST.get('notes_like'))
+#      notes.likes.add(request.user)
 
- 
+#      return HttpResponseRedirect(reverse('notesViewer',args=[str(pk)]))
+
+# def like_notes(request,slug):
+#     note= get_object_or_404(Notes, slug=SlugField)
+#     if request.method == 'POST':
+#         note.likes += 1
+#         note.save()
+#         note.likes.add(request.user)
+#         return HttpResponseRedirect(reverse('notesViewer', args=[SlugField]))
+     
+
+def like_notes(request, pk):
+    note = get_object_or_404(Notes, pk=pk)
+    if request.method == 'POST':
+        note.likes.add(request.user)
+        return HttpResponseRedirect(reverse('notesViewer', args=[note.slug]))
+    
+
+
+#for the likes of the specific page
+def notes_likes(request):
+    user = request.user
+    notes = Notes.objects.filter(author=user)
+    notes_with_likes = []
+    for note in notes:
+        num_likes = note.likes.count()
+        notes_with_likes.append((note, num_likes))
+    context = {
+        'notes':notes,
+        'notes_with_likes': notes_with_likes
+    }
+    return render(request, 'main/noteslikes.html', context)

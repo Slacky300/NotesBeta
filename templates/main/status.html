@@ -1,62 +1,82 @@
-{% extends 'index.html' %}
-{% block content %}
+{% extends 'index.html' %} {% block content %}
 <div class="container mt-4">
   {% include 'authentication/messages.html' %}
-    <table class="table table-hover">
-        <thead>
-          <tr>
-            <th scope="col">Sr. No</th>
-            <th scope="col">File Name</th>
-            <th scope="col">Status</th>
-            <th scope="col">Action</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for x in notes %}
-            <tr>
-                <td scope="row">{{forloop.counter}}</td>
-                <td>{{x.typeN}} of Module {{x.mod}} - {{x.sub}}</td>
-                {% if x.status %}
-                <td style="color: green;">Accepted</td>
-                {% else %}
-                <td style="color: rgb(159, 150, 43);">Under Scrutiny</td>
-                {% endif %}
+  <table class="table table-hover">
+    <thead>
+      <tr>
+        <th scope="col">Sr. No</th>
+        <th scope="col">File Name</th>
+        <th scope="col">Status</th>
+        <th scope="col">Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for x in notes %}
+      <tr>
+        <td scope="row">{{forloop.counter}}</td>
+        <td>{{x.typeN}} of Module {{x.mod}} - {{x.sub}}</td>
+        {% if x.status %}
+        <td style="color: green">Accepted</td>
+        {% else %}
+        <td style="color: rgb(159, 150, 43)">Under Scrutiny</td>
+        {% endif %} {% if not x.status %}
 
-                {% if not x.status %}
+        <td>
+          <button
+            type="button"
+            class="btn btn-danger"
+            data-bs-toggle="modal"
+            data-bs-target="#exampleModal{{forloop.counter}}"
+          >
+            Delete
+          </button>
+        </td>
 
-                <td><button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal{{forloop.counter}}">Delete</button></td>
+        {% else %}
+        <td style="color: rgb(57, 159, 43)">Thank You For Supporting</td>
+        {% endif %}
+      </tr>
 
-                {% else %}
-                <td style="color: rgb(57, 159, 43);">Thank You For Supporting</td>
-                {% endif %}
-            </tr>
+      {% endfor %}
+    </tbody>
+  </table>
 
-          {% endfor %}
-      </table>
-      <!-- Modal -->
-{% for x in notes %}
-<div class="modal fade" id="exampleModal{{forloop.counter}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h1 class="modal-title fs-5" id="exampleModalLabel">Delete</h1>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        Are you Sure you want to delete {{x.typeN}} of {{x.mod}}?
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-success" data-bs-dismiss="modal">Cancel</button>
-        <a href="{{x.slug}}"><button type="button" class="btn btn-danger">Delete</button></a>
+  <!-- Modal -->
+  {% for x in notes %}
+  <div
+    class="modal fade"
+    id="exampleModal{{forloop.counter}}"
+    tabindex="-1"
+    aria-labelledby="exampleModalLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">Delete</h1>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
+        </div>
+        <div class="modal-body">
+          Are you Sure you want to delete {{x.typeN}} of {{x.mod}}?
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-success" data-bs-dismiss="modal">
+            Cancel
+          </button>
+          <a href="{{x.slug}}"
+            ><button type="button" class="btn btn-danger">Delete</button></a
+          >
+        </div>
       </div>
     </div>
   </div>
 </div>
-</div>
 {% endfor %}
 <!-- Button trigger modal -->
-
-
-
 
 {% endblock %}

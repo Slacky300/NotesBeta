@@ -9,6 +9,7 @@ urlpatterns = [
     
     path('notes/<slug:slug>/',views.noteViewer,name='notesViewer'),
     path('status/',views.status,name='status'),
+    path('notesuploded/',views.notesuploded,name='notesuploded'),
     path('status/<slug:slug>/',views.noteDelete,name='noteDelete'),
     path('searchNotes/',views.searchNotes,name='searchNotes'),
     path('login/', views.loginR,name='loginR'),
@@ -24,6 +25,9 @@ urlpatterns = [
     path('adminResponse/',views.adminResponse,name='adminResponse'),
     path('leaderboard/',views.leaderboard,name='leaderboard'),
     path('acceptStatus/<slug:slug>/',views.acceptStatus,name='acceptStatus'),
+    path('like/<int:pk>/', views.like_notes, name='like_notes'),
+    path('noteslikes', views.notes_likes, name='noteslikes'),
+    
     
 
 ]
