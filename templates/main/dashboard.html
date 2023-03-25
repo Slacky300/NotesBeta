@@ -1,4 +1,6 @@
+{% extends 'index.html' %}
 {% load static %}
+{% block content %}
 
 <!DOCTYPE html>
 <html lang="en">
@@ -20,20 +22,20 @@
     <!-- partial:index.partial.html -->
     <div class="dashboard">
       <aside class="search-wrap">
-        <div class="search">
+        <!-- <div class="search">
           <label for="search">
             <input type="text" id="search" />
           </label>
-        </div>
+        </div> -->
 
         <div class="user-actions">
-          <button></button>
+          <button>
           <a href="{% url 'logout' %}">
-            <button>
+            <button style="margin-left: 2070%; ">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
+                width="30"
+                height="30"
                 viewBox="0 0 24 24"
               >
                 <path
@@ -41,6 +43,7 @@
                 />
                 <path d="M11 2h2v10h-2z" />
               </svg>
+           
             </button>
           </a>
         </div>
@@ -103,8 +106,11 @@
 
         <div class="content">
           <section class="info-boxes">
+         
             <div class="info-box">
+             
               <div class="box-icon">
+                
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="48"
@@ -119,6 +125,7 @@
                     d="M10.381 12.309l3.172 1.586a1 1 0 0 0 1.305-.38l3-5-1.715-1.029-2.523 4.206-3.172-1.586a1.002 1.002 0 0 0-1.305.38l-3 5 1.715 1.029 2.523-4.206z"
                   />
                 </svg>
+                
               </div>
 
               <div class="box-content">
@@ -162,9 +169,10 @@
               </div>
 
               <div class="box-content">
+                <a href="{% url 'leaderboard' %}" style="text-decoration: none;">
                 <span class="big">{{rank}}</span>
                 Leaderboard
-              </div>
+              </div></a>
             </div>
 
             <div class="info-box">
@@ -193,3 +201,4 @@
     <!-- partial -->
   </body>
 </html>
+{% endblock %}

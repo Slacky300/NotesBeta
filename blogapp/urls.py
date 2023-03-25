@@ -24,5 +24,6 @@ urlpatterns = [
     path('adminResponse/',views.adminResponse,name='adminResponse'),
     path('leaderboard/',views.leaderboard,name='leaderboard'),
     path('acceptStatus/<slug:slug>/',views.acceptStatus,name='acceptStatus'),
+    
 
 ]

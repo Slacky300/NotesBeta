@@ -330,3 +330,6 @@ def leaderboard(request):
     }
    
     return render(request, 'main/leader.html',context)
+
+
+ 
