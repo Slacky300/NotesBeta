@@ -51,7 +51,6 @@ def dashboard(request):
 
 
 # View for users to add notes starts here
-
 @login_required(login_url='/login/')
 def addNotes(request):    
 
@@ -110,7 +109,7 @@ def addNotes(request):
 @login_required(login_url='/login/')
 def notes(request):
 
-    notes = Notes.objects.filter(status = True,typeN = 'Notes')      #Fetches only that notes which are accepted by the admin
+    notes = Notes.objects.filter(status = True)      #Fetches only that notes which are accepted by the admin
     filteredNotes = NoteFilter(request.GET, queryset = notes)      #Using django-filter extension declared in filters.py file 
     context = {
         'notes' : filteredNotes,
@@ -155,10 +154,7 @@ def searchNotes(request):
     if request.method == 'POST':
 
         searchQ = request.POST.get('searchQ')
-        if searchQ == "" :
-            messages.warning(request,"Search bar is empty")
-            return redirect('notes')
-        notes = Notes.objects.filter(nDetail__contains = searchQ)
+        notes = Notes.objects.filter(nDetail__contains = searchQ,status=True)
 
         if notes is not None:
             context = {
@@ -233,6 +229,7 @@ def noteViewer(request, slug):
     note = Notes.objects.filter(slug = slug)
     context = {
         'note' : note,
+        
     }
     return render(request,'main/noteViewer.html',context)
 
@@ -258,13 +255,13 @@ def teacher(request):
 @login_required(login_url='/login/')
 def btmNav(request):
 
-    notes = Notes.objects.filter(status = True, typeN='LectureSlides')
+    notes = Notes.objects.filter(typeN='LectureSlides')
     return render(request,'main/btmNavSort.html',{'notes':notes})
 
 @login_required(login_url='/login/')
 def refeBk(request):
 
-    notes = Notes.objects.filter(status = True, typeN='ReferenceBook')
+    notes = Notes.objects.filter(status=True,typeN='ReferenceBook')
     return render(request,'main/btmNavSort.html',{'notes':notes})
 
 
@@ -272,7 +269,7 @@ def refeBk(request):
 @login_required(login_url='/login/')
 def pyqA(request):
 
-    notes = Notes.objects.filter(status = True,typeN='PYQ')
+    notes = Notes.objects.filter(status=True,typeN='PYQ')
     return render(request,'main/btmNavSort.html',{'notes':notes})
 
 #bottom nav views ends here
@@ -363,19 +360,30 @@ def leaderboard(request):
 #         note.likes.add(request.user)
 #         return HttpResponseRedirect(reverse('notesViewer', args=[SlugField]))
      
-
+@login_required(login_url='/login/')
 def like_notes(request, pk):
     note = get_object_or_404(Notes, pk=pk)
+    user=request.user
+    liked = note.likes.filter(id=user.id).exists()
     if request.method == 'POST':
-        note.likes.add(request.user)
+        if note.likes.filter(id=user.id).exists():
+            note.likes.remove(user)
+        else:
+            note.likes.add(user)
         return HttpResponseRedirect(reverse('notesViewer', args=[note.slug]))
+   
+    
+
+
+
     
 
 
 #for the likes of the specific page
+@login_required(login_url='/login/')
 def notes_likes(request):
     user = request.user
-    notes = Notes.objects.filter(author=user)
+    notes = Notes.objects.filter(author=user,status=True)
     notes_with_likes = []
     for note in notes:
         num_likes = note.likes.count()
@@ -385,8 +393,6 @@ def notes_likes(request):
         'notes_with_likes': notes_with_likes
     }
     return render(request, 'main/noteslikes.html', context)
-
-
 def addDriveLink(request,slug):
 
     if request.method == 'POST':
