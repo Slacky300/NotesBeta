@@ -11,7 +11,9 @@
       </tr>
     </thead>
     <tbody>
+
       {% for x in notes %}
+      
       <tr>
         <td scope="row">{{forloop.counter}}</td>
         <td>{{x.typeN}} of Module {{x.mod}} - {{x.sub}}</td>
@@ -27,3 +29,5 @@
 
   {% endblock %}
 </div>
+'
+<!-- i have a view pdf button where in a user can view the notes uploaded but now i want to add an buy option to it and if he has buyed the pdf he can view it he can buy through the coins_scored attirube in the models' -->
