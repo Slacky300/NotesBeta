@@ -1,7 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
-from autoslug import AutoSlugField
-# Create your models here.
+from autoslug import AutoSlugField# Create your models here.
 
 class UserAccountManager(BaseUserManager):
     def create_user(self, email, name, password = None):
@@ -50,7 +49,7 @@ class UserAccount(AbstractBaseUser, PermissionsMixin):
     is_mod = models.BooleanField(default=False)
     is_nUser = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
-    coins_scored = models.FloatField(default=0)
+    coins_scored = models.IntegerField(default=100,null=True,blank=True)
 
     objects = UserAccountManager()
 
@@ -58,7 +57,7 @@ class UserAccount(AbstractBaseUser, PermissionsMixin):
     REQUIRED_FIELDS = ['name']
 
     def __str__(self):
-        return self.name
+        return f"{self.name} ({self.coins_scored})"
 
 class Subject(models.Model):
 
@@ -109,17 +108,26 @@ class Notes(models.Model):
     file = models.FileField(upload_to='notes/')
     author = models.ForeignKey(UserAccount,on_delete=models.CASCADE)
     status = models.BooleanField(default=False)
+    likes = models.ManyToManyField(UserAccount,related_name="notes_like")
     typeN = models.CharField(max_length=50,null=True,blank=True,choices=typ)
     docid = models.CharField(max_length=300,null=True,blank=True)
     sub =  models.ForeignKey(Subject,on_delete=models.CASCADE,null=True,blank=True)
     slug = AutoSlugField(populate_from = 'sub',unique=True,null=True,default=None)
 
-    details = f'{sub.name}+ Module - {mod} - {typeN} by {author}'
 
-    nDetail = models.CharField(max_length=100,null=True,blank=True,default=details)
+    
+
+    nDetail = models.CharField(max_length=100,null=True,blank=True)
 
     def __str__(self):
 
         niu = f'{self.sub.name} - {self.mod} {self.typeN} by {self.author}'
 
         return niu
+    
+    def acceptStatus(self):
+
+        return f'/acceptStatus/{self.slug}/'
+    
+    def attachLink(self):
+        return f'/addDriveLink/{self.slug}/'

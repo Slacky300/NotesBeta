@@ -1,0 +1,29 @@
+{% extends 'index.html' %} {% block content %}
+<div class="container mt-3">
+  {% include 'authentication/messages.html' %}
+  <h1>Notes uploaded</h1>
+  <table class="table table-hover">
+    <thead>
+      <tr>
+        <th scope="col">Sr. No</th>
+        <th scope="col">File Name</th>
+        <th scope="col">PDF</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for x in notes %}
+      <tr>
+        <td scope="row">{{forloop.counter}}</td>
+        <td>{{x.typeN}} of Module {{x.mod}} - {{x.sub}}</td>
+        {% if x.status %} {% endif %}
+        <button class="card-link" class="btn btn-success">
+          <td><a href="{{ x.file.url }}">View PDF</a></td>
+        </button>
+      </tr>
+
+      {% endfor %}
+    </tbody>
+  </table>
+
+  {% endblock %}
+</div>

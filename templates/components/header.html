@@ -15,8 +15,12 @@
         <ul class="navbar-nav mb-2 mb-lg-0">
           {% if user.is_superuser %}
             <li class="nav-item">
-            <a class="nav-link " href="{% url 'register' %}">Register</a>
-          </li>
+              <a class="nav-link " href="{% url 'register' %}">Register</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link " href="{% url 'adminResponse' %}">Panel</a>
+            </li>
+            <li class="nav-item"><a class="dropdown-item" href="{% url 'logout' %}">Logout</a></li>
           {% endif %}
           <li class="nav-item">
             <label class="switch">
@@ -35,16 +39,14 @@
               <span class="slider"></span>
           </label>
           </li> -->
-            {% if user.is_authenticated %}
+            {% if user.is_authenticated and not user.is_superuser %}
           <li class="nav-item">
             <a class="nav-link active" aria-current="page" href="{% url 'home' %}">Home</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="{% url 'notes' %}">Notes</a>
           </li>
-          <li class="nav-item">
-            <a class="nav-link" href="{% url 'dashboard' %}">Dashboard</a>
-          </li>
+         
           <!-- <li class="nav-item">
             <a class="nav-link " href="{% url 'about' %}">About us</a>
           </li> -->
@@ -52,9 +54,13 @@
             <a class="nav-link " href="{% url 'teacher' %}">Faculty</a>
           </li>
 
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'dashboard' %}">Dashboard</a>
+          </li>
 
 
-          <li class="nav-item dropdown me-4">
+
+          <!-- <li class="nav-item dropdown me-4">
             <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
               Welcome {{user.name}}
             </a>
@@ -64,7 +70,7 @@
               <li><a class="dropdown-item" href="{% url 'logout' %}">Logout</a></li>
             </ul>
 
-          </li>
+          </li> -->
 
             {% endif %}
 
