@@ -182,14 +182,14 @@ def loginR(request):
         if user is not None:
             login(request,user)
             messages.success(request,'Logged In Successfully')
-            return redirect('home')
+            return redirect('notes')
 
         else:
             messages.error(request,'Invalid Credentials')
-            return render(request,'authentication/login.html')
+            return render(request,'main/land.html')
 
     else:
-        return render(request,'authentication/login.html')
+        return render(request,'main/land.html')
 
 def registerR(request):
 
@@ -345,26 +345,13 @@ def leaderboard(request):
    
     return render(request, 'main/leader.html',context)
 
-# @login_required(login_url='/login/')
-# def like_notes(request,pk):
-#      notes=get_object_or_404(Notes,id=request.POST.get('notes_like'))
-#      notes.likes.add(request.user)
 
-#      return HttpResponseRedirect(reverse('notesViewer',args=[str(pk)]))
-
-# def like_notes(request,slug):
-#     note= get_object_or_404(Notes, slug=SlugField)
-#     if request.method == 'POST':
-#         note.likes += 1
-#         note.save()
-#         note.likes.add(request.user)
-#         return HttpResponseRedirect(reverse('notesViewer', args=[SlugField]))
      
 @login_required(login_url='/login/')
 def like_notes(request, pk):
     note = get_object_or_404(Notes, pk=pk)
     user=request.user
-    liked = note.likes.filter(id=user.id).exists()
+   
     if request.method == 'POST':
         if note.likes.filter(id=user.id).exists():
             note.likes.remove(user)
@@ -372,11 +359,27 @@ def like_notes(request, pk):
             note.likes.add(user)
         return HttpResponseRedirect(reverse('notesViewer', args=[note.slug]))
    
+
+
+#Buy notes 
+def buy_notes(request, pk):
+    note = get_object_or_404(Notes, pk=pk)
+    user = request.user
+
     
+    if user in note.buy.all():
+        messages.warning(request, 'You have already purchased this note.')
+        return HttpResponseRedirect(reverse('notes'))
+    if user.coins_scored < 10: 
+         messages.error(request, "You don't have enough coins to buy this note!")
+         return HttpResponseRedirect(reverse('notes'))
+    user.coins_scored -= 10
+    user.save()
+    note.buy.add(user)
+    messages.success(request, f"You have successfully purchased the {note.sub} notes of module {note.mod} by {note.author.name} !")
+    return HttpResponseRedirect(reverse('notes'))
 
 
-
-    
 
 
 #for the likes of the specific page
@@ -393,6 +396,7 @@ def notes_likes(request):
         'notes_with_likes': notes_with_likes
     }
     return render(request, 'main/noteslikes.html', context)
+    
 def addDriveLink(request,slug):
 
     if request.method == 'POST':

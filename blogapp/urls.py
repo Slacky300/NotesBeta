@@ -29,6 +29,7 @@ urlpatterns = [
     path('noteslikes', views.notes_likes, name='noteslikes'),
     path('addDriveLink/<slug:slug>/',views.addDriveLink,name='addDriveLink'),
     path('adminResponse/<slug:slug>/',views.upDelete,name='upDelete'),
+    path('buy/<int:pk>/', views.buy_notes, name='buy_notes'),
     
 
 ]
