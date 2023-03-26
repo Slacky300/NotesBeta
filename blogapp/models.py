@@ -64,6 +64,7 @@ class Subject(models.Model):
     name = models.CharField(max_length=50)
     teacher = models.CharField(max_length=50)
     teacherurl = models.CharField(max_length=300,null=True,blank=True)
+    img = models.ImageField(upload_to='subImage/',null=True,blank=True)
     def __str__(self):
         return self.name
 

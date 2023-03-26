@@ -1,36 +1,29 @@
 {% extends 'index.html' %} {% block content %}
 
-<a href="{% url 'notes'%}"><button class="btn btn-primary">BACK</button></a>
+<a href="{% url 'notes'%}"><button class="btn btn-primary" style="margin: 20px" >BACK</button></a>
+
+
 <div class="container mt-4">
   {% for x in note%}
+  
+  <form action="{% url 'like_notes' x.pk %}" method="POST">
+    {% csrf_token %}
+    <hr />
+    {% if request.user in x.likes.all %}
+    <button type="submit" class="btn btn-primary liked">
+      <span class="heart-icon">&hearts;</span> {{ x.likes.count }} Liked
+    </button>
+    {% else %}
+    <button type="submit" class="btn btn-primary like" style="background-color: black;">
+      <span class="heart-icon">&hearts;</span> {{ x.likes.count }} Like
+    </button>
+    {% endif %}
+  
+  </form>
   <div class="row">
     <iframe src="{{ x.docid }}" width="840" height="980" allow="autoplay">
     </iframe>
     
-    <form action="{% url 'like_notes' x.pk %}" method="POST">
-      {% csrf_token %}
-      <hr />
-      <!-- <button
-        type="submit"
-        name="like_button"
-        id="my-button"
-        class="btn btn-primary"
-      >
-        <p>{{x.likes.count}} Likes ♥️</p>
-      </button>
-     -->
-      {% if request.user in x.likes.all %}
-      <button type="submit" class="btn btn-primary liked">
-        <span class="heart-icon">&hearts;</span> {{ x.likes.count }} Liked
-      </button>
-      {% else %}
-      <button type="submit" class="btn btn-primary like" style="background-color: black;">
-        <span class="heart-icon">&hearts;</span> {{ x.likes.count }} Like
-      </button>
-      {% endif %}
-
-
-    </form>
     {% endfor %}
   </div>
 

@@ -182,14 +182,14 @@ def loginR(request):
         if user is not None:
             login(request,user)
             messages.success(request,'Logged In Successfully')
-            return redirect('home')
+            return redirect('notes')
 
         else:
             messages.error(request,'Invalid Credentials')
-            return render(request,'authentication/login.html')
+            return render(request,'main/land.html')
 
     else:
-        return render(request,'authentication/login.html')
+        return render(request,'main/land.html')
 
 def registerR(request):
 
