@@ -75,7 +75,7 @@ def addNotes(request):
 
         des = f'{desc} - {mod} of {subje} : {typeN} by {request.user.name}'   #Creating custom description
         # detail = f'{subje}+ Module - {mod} - {typeN} by {request.user}'
-
+        details = f'{sub.name}  Module - {mod} - {typeN} by {request.user}'
 
         try:
 
@@ -86,7 +86,7 @@ def addNotes(request):
                 author = request.user,
                 typeN = typeN,
                 sub = sub,
-                # nDetail = detail,
+                nDetail = details,
             )
 
             note.save()     #Saving the newly created object into the database
@@ -110,7 +110,7 @@ def addNotes(request):
 @login_required(login_url='/login/')
 def notes(request):
 
-    notes = Notes.objects.filter(status = True)      #Fetches only that notes which are accepted by the admin
+    notes = Notes.objects.filter(status = True,typeN = 'Notes')      #Fetches only that notes which are accepted by the admin
     filteredNotes = NoteFilter(request.GET, queryset = notes)      #Using django-filter extension declared in filters.py file 
     context = {
         'notes' : filteredNotes,
@@ -155,6 +155,9 @@ def searchNotes(request):
     if request.method == 'POST':
 
         searchQ = request.POST.get('searchQ')
+        if searchQ == "" :
+            messages.warning(request,"Search bar is empty")
+            return redirect('notes')
         notes = Notes.objects.filter(nDetail__contains = searchQ)
 
         if notes is not None:
@@ -255,13 +258,13 @@ def teacher(request):
 @login_required(login_url='/login/')
 def btmNav(request):
 
-    notes = Notes.objects.filter(typeN='LectureSlides')
+    notes = Notes.objects.filter(status = True, typeN='LectureSlides')
     return render(request,'main/btmNavSort.html',{'notes':notes})
 
 @login_required(login_url='/login/')
 def refeBk(request):
 
-    notes = Notes.objects.filter(typeN='ReferenceBook')
+    notes = Notes.objects.filter(status = True, typeN='ReferenceBook')
     return render(request,'main/btmNavSort.html',{'notes':notes})
 
 
@@ -269,7 +272,7 @@ def refeBk(request):
 @login_required(login_url='/login/')
 def pyqA(request):
 
-    notes = Notes.objects.filter(typeN='PYQ')
+    notes = Notes.objects.filter(status = True,typeN='PYQ')
     return render(request,'main/btmNavSort.html',{'notes':notes})
 
 #bottom nav views ends here
@@ -382,3 +385,31 @@ def notes_likes(request):
         'notes_with_likes': notes_with_likes
     }
     return render(request, 'main/noteslikes.html', context)
+
+
+def addDriveLink(request,slug):
+
+    if request.method == 'POST':
+        try:
+
+            link = request.POST.get('dLink')
+            print(link)
+            note = Notes.objects.get(slug=slug)
+            note.docid = link
+            note.save()
+            messages.success(request,"Drive link added successfully")
+            return redirect('adminResponse')
+        except:
+            messages.error(request,"Failed to add drive link")
+            return redirect('adminResponse')
+
+
+def upDelete(request,slug):
+    try:
+        note = Notes.objects.get(slug=slug)
+        note.delete()
+        messages.success(request,"Note Deleted Successfully")
+        return redirect('adminResponse')
+    except:
+        messages.error(request,"Failed to Delete")
+        return redirect('adminResponse')

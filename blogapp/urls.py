@@ -27,7 +27,8 @@ urlpatterns = [
     path('acceptStatus/<slug:slug>/',views.acceptStatus,name='acceptStatus'),
     path('like/<int:pk>/', views.like_notes, name='like_notes'),
     path('noteslikes', views.notes_likes, name='noteslikes'),
-    
+    path('addDriveLink/<slug:slug>/',views.addDriveLink,name='addDriveLink'),
+    path('adminResponse/<slug:slug>/',views.upDelete,name='upDelete'),
     
 
 ]

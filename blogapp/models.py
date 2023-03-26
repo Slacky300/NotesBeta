@@ -1,7 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
-from autoslug import AutoSlugField
-# Create your models here.
+from autoslug import AutoSlugField# Create your models here.
 
 class UserAccountManager(BaseUserManager):
     def create_user(self, email, name, password = None):
@@ -116,9 +115,9 @@ class Notes(models.Model):
     slug = AutoSlugField(populate_from = 'sub',unique=True,null=True,default=None)
 
 
-    details = f'{sub.name}+ Module - {mod} - {typeN} by {author}'
+    
 
-    nDetail = models.CharField(max_length=100,null=True,blank=True,default=details)
+    nDetail = models.CharField(max_length=100,null=True,blank=True)
 
     def __str__(self):
 
@@ -129,3 +128,6 @@ class Notes(models.Model):
     def acceptStatus(self):
 
         return f'/acceptStatus/{self.slug}/'
+    
+    def attachLink(self):
+        return f'/addDriveLink/{self.slug}/'
