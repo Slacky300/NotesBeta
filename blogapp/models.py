@@ -109,6 +109,7 @@ class Notes(models.Model):
     author = models.ForeignKey(UserAccount,on_delete=models.CASCADE)
     status = models.BooleanField(default=False)
     likes = models.ManyToManyField(UserAccount,related_name="notes_like")
+    buy=models.ManyToManyField(UserAccount,related_name="buy_notes")
     typeN = models.CharField(max_length=50,null=True,blank=True,choices=typ)
     docid = models.CharField(max_length=300,null=True,blank=True)
     sub =  models.ForeignKey(Subject,on_delete=models.CASCADE,null=True,blank=True)
