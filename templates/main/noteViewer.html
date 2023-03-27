@@ -4,7 +4,7 @@
 
 
 <div class="container mt-4">
-  {% for x in note%}
+  {% for x in notes%}
   
   <form action="{% url 'like_notes' x.pk %}" method="POST">
     {% csrf_token %}

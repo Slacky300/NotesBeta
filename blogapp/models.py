@@ -50,6 +50,7 @@ class UserAccount(AbstractBaseUser, PermissionsMixin):
     is_nUser = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
     coins_scored = models.IntegerField(default=100,null=True,blank=True)
+    rank = models.IntegerField(default=0)
 
     objects = UserAccountManager()
 
@@ -110,6 +111,7 @@ class Notes(models.Model):
     author = models.ForeignKey(UserAccount,on_delete=models.CASCADE)
     status = models.BooleanField(default=False)
     likes = models.ManyToManyField(UserAccount,related_name="notes_like")
+    views = models.PositiveIntegerField(default=0)
     buy=models.ManyToManyField(UserAccount,related_name="buy_notes")
     typeN = models.CharField(max_length=50,null=True,blank=True,choices=typ)
     docid = models.CharField(max_length=300,null=True,blank=True)

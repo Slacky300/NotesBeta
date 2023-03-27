@@ -72,7 +72,10 @@
       {% endfor%} -->
   {% for user in page_obj %}
   <tr>
-    <td>{{ page_obj.start_index|add:forloop.counter0 }}</td>
+    <!-- <td>{{ page_obj.start_index|add:forloop.counter0 }}</td>
+     -->
+
+     <td>{{ user.rank }}</td>
     <td>{{ user.name }}</td>
     <td>{{ user.coins_scored }}</td>
   </tr>
