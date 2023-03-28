@@ -5,10 +5,16 @@
 <nav class="navbar navbar-dark bg-dark  ">
     <div class="container-fluid">
       <a class="navbar-brand" href="{% url 'home' %}">NOTES VCET</a>
-
+      <div class="coin">
+      
+          <img src="{% static 'images/coin.png' %}" alt="">
+          
+  
+      </div><p class="cna">{{ user.coins_scored }}</p>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
+     
 
       <div class="collapse navbar-collapse " id="navbarSupportedContent">
 
@@ -87,6 +93,14 @@
         border: 0.2px solid white;
 
 
+    }
+    .coin{
+      margin-left: 96em;
+      width: 3px;
+    }
+    .cna{
+      margin-top: 12px;
+      font-weight: bol;
     }
   </style>
 <!-----------
