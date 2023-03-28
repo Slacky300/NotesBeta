@@ -91,6 +91,7 @@ def addNotes(request):
             note.save()     #Saving the newly created object into the database
 
             messages.success(request,'Sent for Verification Succesfully')
+            note.buy.add(request.user)
             return redirect('home')
         
         except:
@@ -108,8 +109,9 @@ def addNotes(request):
 
 @login_required(login_url='/login/')
 def notes(request):
-
-    notes = Notes.objects.filter(status = True)      #Fetches only that notes which are accepted by the admin
+    notes = (Notes.objects.filter(status = True, typeN= 'Notes') | Notes.objects.filter(status = True, typeN= 'Assignment') | Notes.objects.filter(status = True, typeN= 'Experiment') )
+   
+         #Fetches only that notes which are accepted by the admin
     filteredNotes = NoteFilter(request.GET, queryset = notes)      #Using django-filter extension declared in filters.py file 
     context = {
         'notes' : filteredNotes,
@@ -224,16 +226,28 @@ def logoutR(request):
 
 @login_required(login_url='/login/')
 def noteViewer(request, slug):
+    notes = Notes.objects.filter(slug=slug)
+    note = get_object_or_404(Notes, slug=slug)
 
+    
+    view_count = request.session.get('view_count', {})
+    if not view_count.get(slug):
+        view_count[slug] = 0
 
-    note = Notes.objects.filter(slug = slug)
+    if request.method == 'POST':
+        view_count[slug] += 1
+        request.session['view_count'] = view_count
+        note.views += 1
+        note.save()
+
     context = {
-        'note' : note,
-        
+        'notes': notes,
+        'note': note,
+        'view_count': view_count.get(slug, 0)
     }
-    return render(request,'main/noteViewer.html',context)
+    return render(request, 'main/noteViewer.html', context)
 
-
+  
 
 def aboutUs(request):
 
@@ -325,25 +339,35 @@ def notesuploded(request):
 
 @login_required(login_url='/login/')
 def leaderboard(request):
-    # users_above = UserAccount.objects.filter(coins_scored__gt=UserAccount.coins_scored)
-    # rank = users_above.count() + 1
+    users = UserAccount.objects.all().filter(is_superuser=False).order_by('-coins_scored')
+    rank = 0
+    prev_score = None
+    for user in users:
+        if user.coins_scored != prev_score:
+            rank += 1
+        user.rank = rank
+        user.save()
+        prev_score = user.coins_scored
     
-    users = UserAccount.objects.all().order_by('-coins_scored')
-    top_users = UserAccount.objects.order_by('-coins_scored')[:3] # Assuming 'coins' is the field used for ranking
+    if len(users) > 1 and users[0].coins_scored == users[1].coins_scored:
+        users[0].rank = 1
+        users[0].save()
+        users[1].rank = 1
+        users[1].save()
 
-    # users = UserAccount.objects.all().order_by('-coins_scored')[:10] 
 
-    
-    # users = UserAccount.objects.order_by('-coins_scored')
+
     paginator = Paginator(users, 15)  
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
 
-    context={
-        'users': users,'notes' : notes,'page_obj':page_obj,'top_users': top_users,
+    context = {
+        'users': users,
+        'page_obj': page_obj,
     }
    
-    return render(request, 'main/leader.html',context)
+    return render(request, 'main/leader.html', context)
+
 
 
      
@@ -358,6 +382,7 @@ def like_notes(request, pk):
         else:
             note.likes.add(user)
         return HttpResponseRedirect(reverse('notesViewer', args=[note.slug]))
+    
    
 
 
@@ -376,7 +401,8 @@ def buy_notes(request, pk):
     user.coins_scored -= 10
     user.save()
     note.buy.add(user)
-    messages.success(request, f"You have successfully purchased the {note.sub} notes of module {note.mod} by {note.author.name} !")
+    messages.success(request, f"You have successfully purchased the {note.sub} notes of module {note.mod} by {note.author.name}  !")
+    messages.warning(request, f"You have left with {user.coins_scored}!")
     return HttpResponseRedirect(reverse('notes'))
 
 

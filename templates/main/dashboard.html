@@ -31,7 +31,7 @@
         <div class="user-actions">
           <button>
           <a href="{% url 'logout' %}">
-            <button style="margin-left: 2070%; ">
+            <button style="margin-left: 1000px; ">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="30"
@@ -174,7 +174,7 @@
 
               <div class="box-content">
                 <a href="{% url 'leaderboard' %}" style="text-decoration: none;">
-                <span class="big">{{rank}}</span>
+                <span class="big">{{user.rank}}</span>
                 Leaderboard
               </div></a>
             </div>

@@ -155,7 +155,7 @@ body {
 }
 .menu-wrap nav li a svg {
   display: block;
-  margin-right: 1em;
+  margin-right: 1px;
 }
 .menu-wrap nav li a svg path,
 .menu-wrap nav li a svg circle {
@@ -175,6 +175,50 @@ body {
 .menu-wrap nav li a.active svg path,
 .menu-wrap nav li a.active svg circle {
   fill: #4b84fe;
+}
+@media (max-width: 980px) {
+  .menu-wrap{
+    width: 60%;
+    margin-top: 5%;
+    margin-left: 20%;
+  }
+  .menu-wrap .user .user-avatar {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    overflow: hidden;
+  }
+  .content-wrap .info-boxes .info-box {
+    background: #fff;
+    height: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 0 3em;
+    border: 1px solid #ede8f0;
+    border-radius: 5px;
+  }
+  .search-wrap .user-actions button svg {
+    position: relative;
+    margin-left: -2400px;
+    top: -20px;
+  }
+  .dashboard {
+    display: inline-block;
+    width: 100%;
+    height: 100%;
+  }
+  .content-wrap .info-boxes .info-box {
+    background: #fff;
+    height: 100px;
+    width : 280px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 0 3em;
+    border: 1px solid #ede8f0;
+    border-radius: 5px;
+  }
 }
 .content-wrap {
   grid-area: content;

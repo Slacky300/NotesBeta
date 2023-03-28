@@ -108,9 +108,13 @@
                 <p class="card-text">Credit : {{x.author.name}}</p>
   
                 {% if request.user in x.buy.all %}
+                <form method="POST" action="{% url 'notesViewer' x.slug %}">
+                  {% csrf_token %}
                   <a href="{{x.slug}}" class="card-link">
-                    <button class="btn btn-success">View PDF</button>
+                    <button type="submit" class="btn btn-success">View PDF</button>
                   </a>
+                </form>
+
                 {% else %}
                   <form action="{% url 'buy_notes' x.pk %}" method="POST">
                     {% csrf_token %}
@@ -118,7 +122,10 @@
                     <button class="btn btn-primary" type="submit">Buy Notes</button>
                   </form>
                 {% endif %}
-                <strong><p>{{x.likes.count}} Likes ♥️</p></strong>
+                <strong><p>{{x.likes.count}} Likes ♥️</p> 
+                  <p>{{ x.views }} views</p>
+
+                </strong>
               </div>
             </div>
           </div>
@@ -126,8 +133,10 @@
       </div>
     {% endfor %}
   </div>
-  
+
 
   </div>
 </div>
+
 {% include 'components/notesBottomNav.html' %} {% endblock %}
+
