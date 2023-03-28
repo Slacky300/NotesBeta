@@ -5,12 +5,14 @@
 <nav class="navbar navbar-dark bg-dark  ">
     <div class="container-fluid">
       <a class="navbar-brand" href="{% url 'home' %}">NOTES VCET</a>
-      <div class="coin">
-      
+      <table class="coins">
+        <th>
           <img src="{% static 'images/coin.png' %}" alt="">
-          
-  
-      </div><p class="cna">{{ user.coins_scored }}</p>
+        </th>
+        <th>
+      <p class="cna" style="color: white;">{{ user.coins_scored }}</p>
+    </th>
+    </table>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -63,7 +65,9 @@
           <li class="nav-item">
             <a class="nav-link" href="{% url 'dashboard' %}">Dashboard</a>
           </li>
-
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'logout' %}">Log-Out</a>
+          </li>
 
 
           <!-- <li class="nav-item dropdown me-4">
@@ -94,8 +98,8 @@
 
 
     }
-    .coin{
-      margin-left: 96em;
+    .coins{
+      margin-left: 75%;
       width: 3px;
     }
     .cna{
@@ -103,8 +107,8 @@
       font-weight: bol;
     }
     @media (max-width: 980px) {
-      .coin{
-        margin-left: 3em;
+      .coins{
+        margin-left: 10%;
       }
     }
   </style>
