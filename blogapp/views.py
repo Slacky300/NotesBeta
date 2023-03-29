@@ -53,31 +53,21 @@ def dashboard(request):
 # View for users to add notes starts here
 @login_required(login_url='/login/')
 def addNotes(request):    
-
-
     subs = Subject.objects.all()  #To display subjects in the dropdown menu
-
     context = {
-
         'subj' : subs,
-
     }
 
     if request.method == 'POST':
-
-        desc = request.POST.get('desc')
-        mod = request.POST.get('moduleNo')
-        file = request.FILES.get('file')
-        typeN = request.POST.get('typeN')
-        subje = request.POST.get('subjectName')
-        sub = Subject.objects.get(name = subje)   #Referencing Subject model since it is a foreignKey for Notes model
-
-        des = f'{desc} - {mod} of {subje} : {typeN} by {request.user.name}'   #Creating custom description
-        # detail = f'{subje}+ Module - {mod} - {typeN} by {request.user}'
-        details = f'{sub.name}  Module - {mod} - {typeN} by {request.user}'
-
         try:
-
+            desc = request.POST.get('desc')
+            mod = request.POST.get('moduleNo')
+            file = request.FILES.get('file')
+            typeN = request.POST.get('typeN')
+            subje = request.POST.get('subjectName')
+            sub = Subject.objects.get(name = subje)   #Referencing Subject model since it is a foreignKey for Notes model
+            des = f'{desc} - {mod} of {subje} : {typeN} by {request.user.name}'   #Creating custom description
+            details = f'{sub.name}  Module - {mod} - {typeN} by {request.user}'
             note = Notes(                    #creating a new object  of notes 
                 desc = des,
                 mod = mod,
@@ -87,20 +77,16 @@ def addNotes(request):
                 sub = sub,
                 nDetail = details,
             )
-
             note.save()     #Saving the newly created object into the database
-
             messages.success(request,'Sent for Verification Succesfully')
             note.buy.add(request.user)
-            return redirect('home')
-        
+            return redirect('notes')
         except:
             messages.error(request,"Something went wrong please try again")
             return redirect('addNotes')
-
-        
     else:
         return render(request,'main/addNotes.html',context)
+
 
 #View for users to add notes ends here
 
