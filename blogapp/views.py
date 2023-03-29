@@ -10,6 +10,7 @@ from . filters import NoteFilter
 from django.db.models import Count,Sum
 from django . urls import reverse
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
+from .decorators import unauthenticated_user
 
 # Create your views here.
 
@@ -44,7 +45,7 @@ def dashboard(request):
         'notes' : notes,
         'note_likes':note_likes,
         'rank':rank,
-        
+
     }
     return render(request,'main/dashboard.html',context)
 
@@ -52,7 +53,7 @@ def dashboard(request):
 
 # View for users to add notes starts here
 @login_required(login_url='/login/')
-def addNotes(request):    
+def addNotes(request):
     subs = Subject.objects.all()  #To display subjects in the dropdown menu
     context = {
         'subj' : subs,
@@ -68,7 +69,7 @@ def addNotes(request):
             sub = Subject.objects.get(name = subje)   #Referencing Subject model since it is a foreignKey for Notes model
             des = f'{desc} - {mod} of {subje} : {typeN} by {request.user.name}'   #Creating custom description
             details = f'{sub.name}  Module - {mod} - {typeN} by {request.user}'
-            note = Notes(                    #creating a new object  of notes 
+            note = Notes(                    #creating a new object  of notes
                 desc = des,
                 mod = mod,
                 file = file,
@@ -96,9 +97,9 @@ def addNotes(request):
 @login_required(login_url='/login/')
 def notes(request):
     notes = (Notes.objects.filter(status = True, typeN= 'Notes') | Notes.objects.filter(status = True, typeN= 'Assignment') | Notes.objects.filter(status = True, typeN= 'Experiment') )
-   
+
          #Fetches only that notes which are accepted by the admin
-    filteredNotes = NoteFilter(request.GET, queryset = notes)      #Using django-filter extension declared in filters.py file 
+    filteredNotes = NoteFilter(request.GET, queryset = notes)      #Using django-filter extension declared in filters.py file
     context = {
         'notes' : filteredNotes,
     }
@@ -157,7 +158,7 @@ def searchNotes(request):
         return render(request,'main/searchR.html')
 
 
-
+@unauthenticated_user
 def loginR(request):
 
     if request.method == 'POST':
@@ -178,6 +179,7 @@ def loginR(request):
 
     else:
         return render(request,'main/land.html')
+
 
 def registerR(request):
 
@@ -214,26 +216,30 @@ def logoutR(request):
 def noteViewer(request, slug):
     notes = Notes.objects.filter(slug=slug)
     note = get_object_or_404(Notes, slug=slug)
+    user=request.user
 
-    
     view_count = request.session.get('view_count', {})
     if not view_count.get(slug):
         view_count[slug] = 0
 
-    if request.method == 'POST':
-        view_count[slug] += 1
-        request.session['view_count'] = view_count
-        note.views += 1
-        note.save()
+    if user in note.buy.all():
+        if request.method == 'POST':
+            view_count [slug] += 1
+            request.session['view_count'] = view_count
+            note.views += 1
+            note.save()
 
-    context = {
-        'notes': notes,
-        'note': note,
-        'view_count': view_count.get(slug, 0)
-    }
-    return render(request, 'main/noteViewer.html', context)
+        context = {
+            'notes': notes,
+            'note': note,
+            'view_count': view_count.get(slug, 0)
+        }
+        return render(request, 'main/noteViewer.html', context)
+    else:
+        messages.warning(request, "Dont be oversmart we knew this was gonna happen")
+        return redirect('notes')
 
-  
+
 
 def aboutUs(request):
 
@@ -311,7 +317,7 @@ def acceptStatus(request,slug):
         user.save()
         messages.success(request,'Notes accepted successfully')
         return redirect('adminResponse')
-    
+
 def notesuploded(request):
     notes = Notes.objects.filter(author = request.user,status=True) #Fetches only those notes which are uploaded by the respected user
     context = {
@@ -334,7 +340,7 @@ def leaderboard(request):
         user.rank = rank
         user.save()
         prev_score = user.coins_scored
-    
+
     if len(users) > 1 and users[0].coins_scored == users[1].coins_scored:
         users[0].rank = 1
         users[0].save()
@@ -343,7 +349,7 @@ def leaderboard(request):
 
 
 
-    paginator = Paginator(users, 15)  
+    paginator = Paginator(users, 15)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
 
@@ -351,37 +357,37 @@ def leaderboard(request):
         'users': users,
         'page_obj': page_obj,
     }
-   
+
     return render(request, 'main/leader.html', context)
 
 
 
-     
+
 @login_required(login_url='/login/')
 def like_notes(request, pk):
     note = get_object_or_404(Notes, pk=pk)
     user=request.user
-   
+
     if request.method == 'POST':
         if note.likes.filter(id=user.id).exists():
             note.likes.remove(user)
         else:
             note.likes.add(user)
         return HttpResponseRedirect(reverse('notesViewer', args=[note.slug]))
-    
-   
 
 
-#Buy notes 
+
+
+#Buy notes
 def buy_notes(request, pk):
     note = get_object_or_404(Notes, pk=pk)
     user = request.user
 
-    
+
     if user in note.buy.all():
         messages.warning(request, 'You have already purchased this note.')
         return HttpResponseRedirect(reverse('notes'))
-    if user.coins_scored < 10: 
+    if user.coins_scored < 10:
          messages.error(request, "You don't have enough coins to buy this note!")
          return HttpResponseRedirect(reverse('notes'))
     user.coins_scored -= 10
@@ -408,7 +414,7 @@ def notes_likes(request):
         'notes_with_likes': notes_with_likes
     }
     return render(request, 'main/noteslikes.html', context)
-    
+
 def addDriveLink(request,slug):
 
     if request.method == 'POST':
