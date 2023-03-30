@@ -1,34 +1,59 @@
-{% extends 'index.html' %} {% block content %}
+{% extends 'index.html' %} 
 
-<a href="{% url 'notes'%}"><button class="btn btn-primary" style="margin: 20px" >BACK</button></a>
-
-
+{% block content %}
 <div class="container mt-4">
   {% for x in notes%}
-  
-  <form action="{% url 'like_notes' x.pk %}" method="POST">
-    {% csrf_token %}
-    <hr />
-    {% if request.user in x.likes.all %}
-    <button type="submit" class="btn btn-primary liked">
-      <span class="heart-icon">&hearts;</span> {{ x.likes.count }} Liked
-    </button>
+  <div class="d-flex align-items-center mb-3">
+    <a href="{% url 'notes' %}" class="btn btn-primary mr-3">Back</a>
+
+    <form action="{% url 'like_notes' x.pk %}" method="POST">
+      {% csrf_token %}
+      {% if request.user in x.likes.all %}
+      <button type="submit" class="btn btn-primary liked" style="margin-left: 10px; margin-right: 10px;">
+        <span class="heart-icon">&hearts;</span> {{ x.likes.count }} Liked
+      </button>
+      {% else %}
+      <button type="submit" class="btn btn-primary like" style="margin-left: 10px; margin-right: 10px;">
+        <span class="heart-icon">&hearts;</span> {{ x.likes.count }} Like
+      </button>
+      {% endif %}
+    </form>
+
+    {% if is_bookmarked %}
+    <form method="POST" action="{% url 'notesViewer' note.slug %}">
+      {% csrf_token %}
+      <button type="submit" name="bookmark" value="remove" class="btn btn-danger">
+        <i class="fa fa-bookmark" aria-hidden="true"></i> Remove Bookmark
+      </button>
+    </form>
     {% else %}
-    <button type="submit" class="btn btn-primary like" style="background-color: black;">
-      <span class="heart-icon">&hearts;</span> {{ x.likes.count }} Like
-    </button>
+    <form method="POST" action="{% url 'notesViewer' note.slug %}">
+      {% csrf_token %}
+      <button type="submit" name="bookmark" value="add" class="btn btn-primary">
+        <i class="fa fa-bookmark-o" aria-hidden="true"></i> Add Bookmark
+      </button>
+    </form>
     {% endif %}
-  
-  </form>
-  <div class="row">
-    <iframe src="{{ x.docid }}" width="840" height="980" allow="autoplay">
-    </iframe>
     
-    {% endfor %}
+
   </div>
-
-  <style></style>
-
-  {% endblock %}
+  
+  <hr />
+  
+  <div class="row">
+    <iframe src="{{ x.docid }}" width="840" height="980" allow="autoplay"></iframe>
+  </div>
+  
+  <hr />
+  
+  
+  {% endfor %}
 </div>
-♥️
+
+
+<!-- Add the following script tag to the end of the HTML file to include the Bootstrap Icons library -->
+<script src="https://unpkg.com/@popperjs/core@2.9.3/dist/umd/popper.min.js"
+        integrity="sha384-Dmuy79bF9lhxtZnL5ue5emfj5d6yjiw6yPtbvuUeQYU1M9X9QV/YtkjL/e90RgkP"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/bootstrap-icons.min.js"></script>
+{% endblock %}
