@@ -441,3 +441,14 @@ def upDelete(request,slug):
     except:
         messages.error(request,"Failed to Delete")
         return redirect('adminResponse')
+    
+
+def notesbought(request):
+    user=request.user
+    
+    note=Notes.objects.filter(buy=user,status=True)
+
+    context={
+        'note':note
+    }
+    return render(request,'main/notesbought.html',context)
