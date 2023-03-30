@@ -10,7 +10,7 @@ from . filters import NoteFilter
 from django.db.models import Count,Sum
 from django . urls import reverse
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
-from .decorators import unauthenticated_user
+from .decorators import unauthenticated_user,allowed_users
 
 # Create your views here.
 
@@ -23,9 +23,9 @@ def home(request):
 
     return render(request,'main/land.html')
 
-
+@allowed_users(allowed_roles=['admin'])
 def adminResponse(request):
-
+   
     notes = Notes.objects.all()
     context = {
         'notes' : notes,
