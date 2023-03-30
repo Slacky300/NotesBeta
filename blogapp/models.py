@@ -51,6 +51,7 @@ class UserAccount(AbstractBaseUser, PermissionsMixin):
     is_staff = models.BooleanField(default=False)
     coins_scored = models.IntegerField(default=100,null=True,blank=True)
     rank = models.IntegerField(default=0)
+    bookmarks = models.ManyToManyField('blogapp.Notes', blank=True)
   
 
     objects = UserAccountManager()

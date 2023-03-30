@@ -216,28 +216,43 @@ def logoutR(request):
 def noteViewer(request, slug):
     notes = Notes.objects.filter(slug=slug)
     note = get_object_or_404(Notes, slug=slug)
-    user=request.user
 
+    # Get the view count from the session, or initialize it if it doesn't exist
     view_count = request.session.get('view_count', {})
     if not view_count.get(slug):
         view_count[slug] = 0
 
-    if user in note.buy.all():
-        if request.method == 'POST':
-            view_count [slug] += 1
+    if request.method == 'POST':
+        # Check if the bookmark button was clicked
+        if 'bookmark' in request.POST:
+            # Check if the user has already bookmarked the note
+            user = request.user
+            bookmarked_notes = user.bookmarks.all()
+            if note in bookmarked_notes:
+                # Remove the bookmark
+                user.bookmarks.remove(note)
+            else:
+                # Add the bookmark
+                user.bookmarks.add(note)
+        else:
+            # Increment the view count for the current note in the session
+            view_count[slug] += 1
             request.session['view_count'] = view_count
-            note.views += 1
-            note.save()
 
-        context = {
-            'notes': notes,
-            'note': note,
-            'view_count': view_count.get(slug, 0)
-        }
-        return render(request, 'main/noteViewer.html', context)
-    else:
-        messages.warning(request, "Dont be oversmart we knew this was gonna happen")
-        return redirect('notes')
+    # Check if the user has already bookmarked the note
+    user = request.user
+    bookmarked_notes = user.bookmarks.all()
+    is_bookmarked = note in bookmarked_notes
+
+    context = {
+        'notes': notes,
+        'note': note,
+        'view_count': view_count.get(slug, 0),
+        'is_bookmarked': is_bookmarked
+    }
+    return render(request, 'main/noteViewer.html', context)
+
+
 
 
 
@@ -452,3 +467,13 @@ def notesbought(request):
         'note':note
     }
     return render(request,'main/notesbought.html',context)
+
+
+@login_required
+def bookmark(request):
+    bookmarks = request.user.bookmarks.all()
+    context = {
+        'bookmarks': bookmarks,
+    }
+    return render(request, 'main/bookmark.html', context)
+
