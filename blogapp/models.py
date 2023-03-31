@@ -60,7 +60,7 @@ class UserAccount(AbstractBaseUser, PermissionsMixin):
     REQUIRED_FIELDS = ['name']
 
     def __str__(self):
-        return f"{self.name} ({self.coins_scored})"
+        return f"{self.name}"
 
 class Subject(models.Model):
 
@@ -137,3 +137,36 @@ class Notes(models.Model):
     
     def attachLink(self):
         return f'/addDriveLink/{self.slug}/'
+    
+    def comnt(self):
+        return f'/notes/{self.slug}/comment/'
+    
+
+class Comment(models.Model):
+    toU = models.ForeignKey(UserAccount,on_delete=models.CASCADE)
+    fromU = models.ForeignKey(UserAccount,on_delete=models.CASCADE,related_name='fromCmnt')
+    note = models.ForeignKey(Notes,on_delete=models.CASCADE)
+    slug = AutoSlugField(populate_from = 'fromU',unique = True)
+    cmnt = models.TextField()
+    cmntDate = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f'{self.cmnt} by {self.toU.name}'
+    
+    def reply(self):
+
+        return f'/notes/{self.note.slug}/comment/{self.slug}/'
+    
+    def seeR(self):
+        return f'/seeRply/{self.slug}/'
+    
+
+class CmntReply(models.Model):
+
+    cmtRply = models.ForeignKey(UserAccount,on_delete=models.CASCADE)
+    cmntR = models.TextField()
+    frR = models.TextField()
+    slug = AutoSlugField(populate_from = 'cmntR',unique = True)
+
+    def __str__(self):
+        return f'{self.frR} from {self.frR}'

@@ -216,6 +216,8 @@ def logoutR(request):
 def noteViewer(request, slug):
     notes = Notes.objects.filter(slug=slug)
     note = get_object_or_404(Notes, slug=slug)
+    cmnt = Comment.objects.filter(toU = note.author)
+    
 
     # Get the view count from the session, or initialize it if it doesn't exist
     view_count = request.session.get('view_count', {})
@@ -248,7 +250,9 @@ def noteViewer(request, slug):
         'notes': notes,
         'note': note,
         'view_count': view_count.get(slug, 0),
-        'is_bookmarked': is_bookmarked
+        'is_bookmarked': is_bookmarked,
+        'cmnt' : cmnt,
+
     }
     return render(request, 'main/noteViewer.html', context)
 
@@ -477,3 +481,48 @@ def bookmark(request):
     }
     return render(request, 'main/bookmark.html', context)
 
+
+def cmntAll(request,slug):
+
+    note = Notes.objects.get(slug=slug)
+    if request.method == 'POST':
+        cmntTxt = request.POST.get('cmnt')
+        cmnt = Comment(
+            toU = note.author,
+            fromU = request.user,
+            cmnt = cmntTxt,
+            note = note, 
+        )
+        cmnt.save()
+        messages.success(request,'Comment added successfully')
+        ns = f'/notes/{note.slug}/'
+        return redirect(ns)
+    
+def replyA(request,slug,slugA):
+
+    cmnt = Comment.objects.get(slug=slugA)
+    note = Notes.objects.get(slug= slug)
+    user = UserAccount.objects.get(email = cmnt.fromU.email)
+    if request.method == 'POST':
+        cmtxt = request.POST.get('cmntR')
+        cm = CmntReply(
+            cmtRply = user,
+            cmntR = cmtxt,
+            frR = request.user,
+        )
+        cm.save()
+
+        messages.success(request,'Comment added successfully')
+        ns = f'/notes/{note.slug}/'
+        return redirect(ns)
+
+def seeRply(request,slug):
+
+    cmt = Comment.objects.get(slug=slug)
+    note = Notes.objects.get(slug = cmt.note.slug)
+    cmtR = CmntReply.objects.filter(cmtRply = cmt.fromU)
+    context = {
+        'cmnt' : cmtR,
+        'note' : note,
+    }
+    return render(request,'components/cmntReply.html',context)

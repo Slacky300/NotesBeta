@@ -1,0 +1,13 @@
+{% extends 'index.html' %}
+{% block content %}
+
+    <div class="row">
+        <h3>Reply section  of {{note}}</h3>
+        {% for x in cmnt %}
+            
+            <p>Reply from : {{x.frR}}</p>
+            <p>{{x.cmntR}}</p>
+        {% endfor %}
+    </div>
+
+{% endblock %}

@@ -30,7 +30,12 @@ urlpatterns = [
     path('addDriveLink/<slug:slug>/',views.addDriveLink,name='addDriveLink'),
     path('adminResponse/<slug:slug>/',views.upDelete,name='upDelete'),
     path('buy/<int:pk>/', views.buy_notes, name='buy_notes'),
-     path('notesbought/', views.notesbought, name='notesbought'),
-     path('bookmark/', views.bookmark, name='bookmark'),
+    path('notesbought/', views.notesbought, name='notesbought'),
+    path('bookmark/', views.bookmark, name='bookmark'),
+
+    path('notes/<slug:slug>/comment/',views.cmntAll,name='cmntAll'),
+    path('notes/<slug:slug>/comment/<slug:slugA>/',views.replyA,name='replyA'),
+    path('seeRply/<slug:slug>/',views.seeRply,name='seeRply'),
+    
 
 ]
